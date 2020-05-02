@@ -1,0 +1,135 @@
+<style type="text/css" media="screen">
+	.video_div{
+		display:table;
+	    position:relative;
+	    width:70%;
+	}
+
+	/*video::-webkit-media-controls-overlay-play-button {
+	  display: none;
+	}*/
+</style>
+
+<section class="l_section1 hop_slider">
+	 <owl-carousel #owlElement
+        [options]="{items: 1, dots: true, navigation: true, nav: false, navClass: ['owl-theme', 'owl-dots', 'owl-dot', 'owl-prev', 'owl-next' ], responsive: {'0': {  items: 1, margin: 0 },
+                '480': { items: 1,  margin: 0 },
+	'600': { items: 1, margin: 0}
+           } }"
+        [items]="['../assets/images/hopper.png', '../assets/images/hopper.png', '../assets/images/hopper.png']">
+		<div class="item" *ngFor = "let hopperslide of hopperSlideList">
+			<div class="sliderimg">
+				<img [src] = hopperslide.hopper_slide_img />
+			</div>
+			<div class="container">
+				<div class="col_6">
+					<div class="slider_text">
+						<h1>{{hopperslide.hopper_title}}</h1>
+						<p>{{hopperslide.hopper_dis}}</p>
+						<button (click)="redirect()"class="btn">{{hopperslide.dbtn}}</button>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</owl-carousel>
+</section>
+<section class="l_section2 hop_sec2" *ngIf="!show_future">
+	<div class="container">
+		<div class="row clr">
+			<div class="col_6">
+				<img src = "../assets/images/hopper-pictures.png" alt="" />
+			</div>
+
+			<div class="col_6 list_info">
+				<h2>{{title.avantages}}</h2>
+				<div class="ad_dt" *ngFor = "let listinfo of list_info">
+					<span>{{listinfo.name}}</span>
+					<p [innerHTML] = "listinfo.name_dis"></p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<section class="l_section4 hop_con" id="l_section4" *ngIf="!show_future">
+	<div class="container">
+		<div class="row clr">
+			<div class="col_6">
+				<div class="contact_form">
+					<form #f="ngForm" (ngSubmit) = "onSubmit(f.value)">
+						<div class="form_group">
+							<input type="text"  placeholder="{{placeholder.geneva_switzerland}}" name = "address" [(ngModel)] = "addresss" #address = "ngModel"  required /><button><img src = "../assets/images/send.png" alt="send" /></button>
+							
+						</div>
+						<div class="form_group">
+							<div class="row clr">
+								<div class="col_6">
+									<input type="text" placeholder="{{placeholder.first_name | translate}}" name = "name" [(ngModel)] = "name" required  />
+									
+								</div>
+								<div class="col_6">
+									<input type="text" placeholder="{{placeholder.last_name | translate}}" name="snames" [(ngModel)]="snames" #sname="ngModel" required   />
+						              
+							    </div>
+							</div>
+						</div>
+						<div class="form_group tel">
+							<input type="tel" placeholder= "{{placeholder.number}}" minlength="9" maxlength="10" name="mobile" [(ngModel)]="mobile" required  /><img src= "../assets/images/flag.svg" />
+					              <span style="
+					          position: absolute;
+					          left: 51px;
+					          font-weight: 500;
+					      ">+ 41</span>
+					      
+						</div>
+						<div class="form_group">
+							<input type="email" placeholder="{{placeholder.email}}" name="email" [(ngModel)]= "email" required />
+							
+						</div>
+						<div class="form_group checkbox_div">
+
+							<label class="check_lb">{{title.newsletter}}<input type="checkbox"> <span class="checkmark"></span>
+							</label>
+						</div>
+						<!-- <div><span>{{title.hopper_message | translate}}</span></div> -->
+						<div class="sub_btn"><button class="btn" [disabled]="f.invalid">{{button.valider}}</button></div>
+					</form>
+				</div>
+			</div>
+			<div class="col_6 l_section4_r">
+				<h2 [innerHTML] = "title.Join_the_communauty"></h2>
+				<!-- <img src = "../assets/images/hope_con.jpg" alt="" /> -->
+				<!-- <video controls style="max-width: 100%;height: auto;border: 0;">
+  					<source src="https://drive.google.com/file/d/1jzHtDwNHgTCZpL-Nh9HK0MxaIpiCPG8t/view" type="video/mp4">
+  					</video> -->
+  				<video controls preload="none" poster="../assets/images/event-hopper-img.png" src="../assets/images/hopper.mp4" style="width: 100%;height: auto;border-radius: 4px;">
+		  		</video>
+		  		<!-- <div class="playpause"></div> -->
+			</div>
+
+		</div>
+	</div>
+</section>
+
+
+<section class="l_section4" *ngIf="show_future">
+			<div class="l_section4_in" style="padding-bottom: 0;">
+				<div class="container">
+					<div class="row clr">
+						<div class="col_6">
+							<h1 style="color: unset;">FUTURE HOPPER?</h1>
+							<p style="font-size: 15px;line-height: unset;padding-bottom: 30px;">LE HOPPER MANAGER TENVERRA UN MAIL TRES PROCHAINMENT POUR TE DONNER DE PLUS AMPLES INFORMATIONS.</p>
+							<h6 style="font-size: 15px;">En attendant, suis-nous sur nos reseaux!</h6>
+							<div class="soc_icon">
+								<a href="https://www.instagram.com/hop.delivery/" target="_blank"><img src= "../assets/images/insta.png" alt="insta"></a>
+								<a href="https://www.facebook.com/hop.delivery/" target="_blank"><img src= "../assets/images/fb.png" alt="facebook"></a>
+							</div>
+						</div>
+						<div class="col_6 l_section4_r">
+							<img src = "../assets/images/hoppersbag.png" class="" alt="man" />
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>

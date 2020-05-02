@@ -1,0 +1,84 @@
+
+
+  <!--<div class="order_title clr">-->
+    <!--<div class="col_11">-->
+      <!--<h6>{{title.favourites}}</h6>-->
+    <!--</div>-->
+    <!--<div class="col_1">-->
+      <!--<button><img src="../assets/images/cross.png" /></button>-->
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="cur_ord_dt favourites_dt clr">-->
+    <!--<div class="res_name">{{description.bc}}</div>-->
+    <!--<div class="overflow_div">-->
+      <!--<div class="clr">-->
+        <!--<div class="col_8">-->
+          <!--<h6>{{title.burgers_co}}</h6>-->
+
+        <!--</div>-->
+        <!--<div class="col_4">-->
+          <!--<div class="form_group checkbox_div"><label class="check_lb"><input type="checkbox"><span class="checkmark"></span></label></div>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="cur_ord_dt favourites_dt clr">-->
+    <!--<div class="res_name">{{description.bc}}</div>-->
+    <!--<div class="overflow_div">-->
+      <!--<div class="clr">-->
+        <!--<div class="col_8">-->
+          <!--<h6>{{title.lentrecote}}</h6>-->
+
+        <!--</div>-->
+        <!--<div class="col_4">-->
+          <!--<div class="form_group checkbox_div"><label class="check_lb"><input type="checkbox"><span class="checkmark"></span></label></div>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="cur_ord_dt favourites_dt clr">-->
+    <!--<div class="res_name">{{description.bc}}</div>-->
+    <!--<div class="overflow_div">-->
+      <!--<div class="clr">-->
+        <!--<div class="col_8">-->
+          <!--<h6>{{title.coucou}}</h6>-->
+        <!--</div>-->
+        <!--<div class="col_4">-->
+          <!--<div class="form_group checkbox_div"><label class="check_lb"><input type="checkbox"><span class="checkmark"></span></label></div>-->
+        <!--</div>-->
+      <!--</div>-->
+
+    <!--</div>-->
+  <!--</div>-->
+  <!--<div class="del_sec"><a href="#">{{links.delete_section}}</a></div>-->
+
+  <div class="pro_title">
+    <h6>{{title.favourites}}</h6>
+    <a class="edit" *ngIf="!is_edit" (click)="is_edit=true">Edit</a>
+    <a class="edit" *ngIf="is_edit" (click)="is_edit=false"><img src="../assets/images/cross.png" /></a>
+  </div>
+  <div class="row">
+    <div class="col_6" *ngFor="let store of filtered_store_list; let index=index;">
+      <div class="cur_ord_dt favourites_dt clr">
+        <!-- <div class="res_name">{{description.bc}}</div> -->
+         <img src="{{store.image_url != '' ? user_helper.CONSTANT.IMAGE_BASE_URL + store.image_url : 'web_images/store_logo.png'}}" class="res_name" />
+        <div class="overflow_div">
+          <div class="clr">
+            <div class="col_8" (click)="get_item_list(store)">
+              <h6>{{store.name}}</h6>
+              <span>{{store.delivery_time}} - {{store.delivery_time_max}} {{title.min | translate}}</span>
+              <span>{{store.user_rate}} <span style="display: inline;" class="fa fa-star"></span> ({{store.user_rate_count}})</span>
+            </div>
+            <div class="col_4">
+              <div class="form_group checkbox_div" *ngIf="is_edit">
+                <label class="check_lb"><input (change)="check_store(store._id)" type="checkbox" [checked]="delete_favourite_store_array.indexOf(store._id) !== -1"><span class="checkmark"></span></label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div (click)="delete_store()" *ngIf="is_edit && delete_favourite_store_array.length>0" class="del_sec"><a>{{links.delete_section}}</a></div>

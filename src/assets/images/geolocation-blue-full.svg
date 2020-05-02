@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="16px" viewBox="0 0 16 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch Beta 51 (57336) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Address---Active" transform="translate(-279.000000, -17.000000)" fill="#96CFEE" fill-rule="nonzero">
+            <g id="Email">
+                <path d="M294.6078,21.9878293 L279.719865,17.0186458 C279.28833,16.9106201 278.910738,17.2887102 279.018621,17.7208131 L283.981267,32.6283635 C284.143092,33.1144793 284.790394,33.1144793 285.006161,32.6823764 C286.99166,28.2911498 287.999633,26.0800713 288.030079,26.049141 C288.062105,26.0166071 290.272659,25.004918 294.661742,23.0140737 C295.147218,22.7980223 295.093277,22.1498679 294.6078,21.9878293 Z" id="Icon" transform="translate(287.000000, 25.000000) scale(-1, 1) translate(-287.000000, -25.000000) "></path>
+            </g>
+        </g>
+    </g>
+</svg>

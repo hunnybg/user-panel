@@ -1,0 +1,199 @@
+<ng-template #content let-c="close" let-d="dismiss" class="white-popup-block">
+  <button type="button" class="close"  id="register_modal" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title.sign_up | translate}}</h4>    
+  </div>
+  <div class="modal-body">
+    <div class="login_form">         
+          <form #userForm="ngForm" (ngSubmit)="userRegister(userForm.value)">
+            <div class="form_group">
+              <input type="text"  placeholder="{{placeholder.name | translate}}" name="first_name" [(ngModel)]="user_register.first_name" #first_name="ngModel" required />
+              <div *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)" class="validation_error">
+                  <div *ngIf = "first_name.errors.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+            </div>
+            <div class="form_group">
+                <input type="text"  placeholder="{{placeholder.surame | translate}}" name="last_name" [(ngModel)]="user_register.last_name" #last_name="ngModel" required />
+                <div *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)" class="validation_error">
+                  <div *ngIf = "last_name.errors.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+            </div>
+            <div class="form_group">
+              <input type="email"  placeholder="{{placeholder.email}}" name="email" [(ngModel)]="user_register.email" #email="ngModel" required />
+              <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                  <div *ngIf = "email.errors?.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+                  <div *ngIf = "email.errors?.pattern && email.touched">
+                      {{title.please_enter_valid_email | translate}}
+                  </div>
+              </div>
+            </div>
+            <div class="form_group">
+              <input type="password"  placeholder="{{placeholder.password}}" name="password" [(ngModel)]="user_register.password" #password="ngModel" minlength="6" required />
+              <div *ngIf="password.invalid && (password.dirty || password.touched)" class="validation_error">
+                <div *ngIf = "password.errors?.required">
+                    {{title.this_field_is_required | translate}}
+                </div>
+                <div *ngIf = "password.errors?.minlength && password.touched">
+                    {{title.password_doesnt_seem_right | translate}}
+                </div>
+            </div>
+            </div>
+
+            <div class="form_group tel">
+              <input type="tel"  placeholder="{{placeholder.number}}" (keypress)="user_helper.number_validation($event)" name="phone" [(ngModel)]="user_register.phone" minlength="9" maxlength="12" #phone="ngModel" required />
+              <!-- <span style="position: absolute;left: 51px;font-weight: 500;">+ 41</span> -->
+              <select (change)="select_country()" style="position: absolute;left: 5px;top:3px;font-weight: 500;width: 50px;" name="country_phone_code" [(ngModel)]="user_register.country_phone_code" #country_phone_code="ngModel">
+                <option *ngFor="let country of country_list">{{country.country_phone_code}}</option>
+              </select>
+              <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="validation_error">
+                  <div *ngIf = "phone.errors?.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+            </div>
+
+            <div class="form_group checkbox_div">
+              <label class="check_lb">{{button.agree | translate}} <a target="_blank" href="/terms.html">{{button.terms_and_condition | translate}}</a> and <a  target="_blank" href="/terms.html">{{button.privacy_policy | translate}}</a><input name="trems" [(ngModel)]="user_register.trems" type="checkbox" #trems="ngModel" required> <span class="checkmark"></span></label>
+              <div *ngIf="trems.invalid && (trems.dirty || trems.touched)" class="validation_error">
+                <div *ngIf = "trems.errors?.required">
+                    {{title.please_accept_terms_cond_signup | translate}}
+                </div>
+              </div>
+              <div class="validation_error">{{error_message | translate}}</div>
+            </div>
+            <div class="sub_btn"><button class="btn" [disabled]="userForm.invalid">{{button.signup}}</button></div>
+            <div class="acc" (click) = "d('Cross click')"><p>{{title.acount}}</p><a (click)="open2(content2)" class="popup-with-form">{{button.login | translate}}</a>
+            </div>
+
+            
+          </form>
+    
+        </div>
+  </div>
+  </ng-template>
+
+  <ng-template #content2 let-c="close" let-d="dismiss" class="white-popup-block">
+              <button type="button" class="close" aria-label="Close" id="login_modal" (click)="d('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title2">{{title.login}}</h4>                
+              </div>
+              <div class="modal-body">
+                 <div class="login_form">
+                    <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm.value)">
+
+                        <div [ngSwitch]="email_placeholder">
+                            <div *ngSwitchCase=1>
+                              <div class="form_group">
+                                  <input type="text" id="email_or_phone" placeholder="{{placeholder.email_phone}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                      <div *ngIf = "email.errors.required">
+                                          {{title.this_field_is_required | translate}}
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                            <div *ngSwitchCase=2>
+                                <div class="form_group">
+                                    <input type="text" id="phone" (keypress)="user_helper.number_validation($event)" placeholder="{{placeholder.phone}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                        <div *ngIf = "email.errors.required">
+                                            {{title.this_field_is_required | translate}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngSwitchCase=3>
+                                <div class="form_group">
+                                    <input type="email" id="email" placeholder="{{placeholder.email}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                        <div *ngIf = "email.errors.required">
+                                            {{title.this_field_is_required | translate}}
+                                        </div>
+                                        <div *ngIf = "email.errors?.email">
+                                            {{title.please_enter_valid_email | translate}}
+                                        </div>
+                                    </div>
+                                    <div *ngIf="email_or_phone_error" class="validation_error">
+                                        <div>{{title.please_enter_valid_email_phone | translate}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      <div class="form_group">
+                        <input type="password"  placeholder="{{placeholder.password}}" name="password" [(ngModel)]="user_login.password" #password="ngModel" minlength="6" required />
+                        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="validation_error">
+                          <div *ngIf = "password.errors.required">
+                              {{title.this_field_is_required | translate}}
+                          </div>
+                          <div *ngIf = "password.errors?.minlength && password.touched">
+                              {{title.password_doesnt_seem_right | translate}}
+                          </div>
+                        </div>
+                        <div class="validation_error">{{error_message | translate}}</div>
+                      </div>
+                      <div (click) = "d('Cross click')" class="forg_pass"><a (click)="open2(content3)">{{title.forgot_password | translate}}</a></div>
+                      <div class="sub_btn"><button type="submit" class="btn" [disabled]="!loginForm.form.valid" >{{button.login_b}}</button></div>
+                      <div (click) = "d('Cross click')"><a class="signup_l popup-with-form" (click)="open(content)">{{button.signup | translate}}</a></div>
+                    </form>
+                  </div> 
+              </div>
+            </ng-template>
+
+  <ng-template #content4 let-c="close" let-d="dismiss" class="white-popup-block">
+
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title2">{{title.check_your_email | translate}}</h4>                
+    </div>
+    <div class="modal-body">
+      <span class="text-center">
+        {{title.forgot_password_success_message | translate}}
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-template #content3 let-c="close" let-d="dismiss" class="white-popup-block">
+
+    <button type="button" class="close" aria-label="Close" id="forgot_modal" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title2">{{title.forgot_password | translate}}</h4>                
+    </div>
+    <div class="modal-body">
+       <div class="login_form">
+          <form #userforgotpasswordForm="ngForm" (ngSubmit)="userForgotPassword(userforgotpasswordForm.value)" >
+            <div class="form_group">
+                <input type="email" id="email" placeholder="{{placeholder.email}}" name="email" [(ngModel)]="user_forgot_password.email" #email="ngModel" required />
+                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                    <div *ngIf = "email.errors.required">
+                        {{title.this_field_is_required | translate}}
+                    </div>
+                    <div *ngIf = "email.errors?.email">
+                        {{title.please_enter_valid_email | translate}}
+                    </div>
+                </div>
+            </div>
+            <div class="validation_error">{{error_message}}</div>
+            <div class="forg_pass"><a href="#"></a></div>
+            <button id="success_modal" (click)="open(content4)"></button>
+            <div class="sub_btn"><button type="submit" class="btn" [disabled]="!userforgotpasswordForm.form.valid" >{{button.submit}}</button></div>
+            <div><a class="signup_l popup-with-form"></a></div>
+          </form>
+        </div> 
+    </div>
+  </ng-template>
+<button class="btn signup" (click)="open(content2)" *ngIf="user_id==''">{{button.signin}}</button>

@@ -1,0 +1,39 @@
+<section class="thank">
+	<div class="container-fluid"> 
+		<div class="container">
+			<div class="row">
+				<div class="col-md-6">
+					<div class="thankyous">
+						<h2>{{title.thank_you | translate}} !</h2>
+						<p>{{description.thakyou_p | translate}}</p>
+						<button class="btn btn-deault" (click)="goto_tracking()" style="background-color:#000000;color: white;padding:0px;border-radius: 5px; margin-left: 7px;">{{button.track_your_order | translate}}</button>
+					</div>
+				</div>
+				<div class="col-md-6">
+					<img src="/assets/img/thank_you.png" alt="basket_img2" class="img-fluid" />
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+
+ <!-- old code -->
+ 
+<!-- <section class="padt100">		
+	<div class="welcome thankyou clr">
+		<div class="thankyou_in">
+			<div class="col_7">
+				<div class="container">
+					<h2>{{title.thank_you | translate}} !</h2>
+					<p>{{description.thakyou_p | translate}}</p>
+					<button class="btn" (click)="goto_tracking()">{{button.track_your_order | translate}}</button>
+				</div>
+			</div>
+			<div class="col_5 fr">
+				<img src="/assets/img/thank_you.png" alt="basket_img2" class="img-fluid" />
+			</div>
+		</div>
+		
+	</div>
+</section> -->

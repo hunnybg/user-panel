@@ -1,0 +1,138 @@
+@font-face{
+    font-family:'Robot Bold';
+    src: url('/assets/Roboto_fonts/Roboto-Bold.ttf') format("truetype");
+}
+@font-face{
+    font-family:'Robot Regular';
+    src: url('/assets/Roboto_fonts/Roboto-Regular.ttf') format("truetype");
+}
+@font-face {
+    font-family: 'Roboto Light';
+    src: url('/assets/Roboto_fonts/Roboto-Light.ttf') format('truetype');
+}
+*:focus {
+    outline: 0;
+    /* or */
+    outline: none;
+}
+.help{
+  padding: 50px 0px;
+  background-color: #fafafa;
+  width: 100%;
+  margin-top: 100px;
+}
+.help h5{
+  color:#393e39;
+  font-family:Roboto Regular;
+}
+.help p a{
+  color: red;
+  text-decoration: underline;
+  font-family:Roboto Regular;
+}
+.help p{
+  font-family:Roboto Regular;
+  font-size: 18px;
+  color: #9eabaf;
+  line-height:31px;
+  vertical-align:baseline;
+  letter-spacing:normal;
+  word-spacing:0px;
+  font-weight:400;
+}
+.help .help_img{
+  margin-top: 70px;
+}
+.help2{
+  background-color: #fafafa;
+  width: 100%;
+  text-align: justify;
+  padding: 20px 0px;
+  font-family:Roboto Regular;
+}
+.help2 .col-md-6{
+  padding-bottom: 15px;
+}
+.help2 h5{
+  font-size: 16px;
+  margin-bottom: 0px;
+}
+.help2 p{
+  color: #9eabaf;
+  font-size:16px;
+  line-height:31px;  
+  font-weight:500;
+  font-family:Roboto Regular; 
+}
+@media (min-width: 1500px) and (max-width: 2000px) {
+  .help .help_img{
+    margin-top: 40px;
+  }
+}
+@media (min-width: 700px) and (max-width: 1024px) {
+  .help {
+    padding: 50px 0px;
+  }
+}
+@media (min-width: 601px) and (max-width: 740px) {
+  .help .help_img{
+    margin-top: 0px;
+  }
+  #first{
+    order: 1;
+  }
+  #second{
+    order: 2;
+    margin-top: 10px;
+  }
+}
+@media (min-width: 501px) and (max-width: 600px) {
+  .help .help_img{
+    margin-top: 60px;
+  }
+  #first{
+    order: 1;
+  }
+  #second{
+    order: 2;
+    margin-top: 10px;
+  }
+}
+@media (min-width: 300px) and (max-width: 500px) {
+  .help .help_img{
+    margin-top: 10px;
+  }
+  #first{
+    order: 1;
+  }
+  #second{
+    order: 2;
+    margin-top: 10px;
+  }
+}
+@media only screen and (max-width: 665px) {
+  .help {
+    padding: 20px 10px;
+  }
+}
+@media only screen and (max-width: 414px) {
+  .help {
+    padding: 50px 10px;
+  }
+}
+@media only screen and (max-width: 375px) {
+  .help {
+    padding: 50px 10px;
+  }
+}
+@media only screen and (max-width: 360px) {
+  .help {
+    padding: 20px 10px;
+  }   
+}
+@media (max-width: 500px) and (min-width: 301px) {
+  .help {
+    margin-top: 100px;
+    text-align: justify;
+  }
+}

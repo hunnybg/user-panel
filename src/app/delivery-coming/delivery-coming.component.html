@@ -1,0 +1,241 @@
+<style>
+    #map_pin{
+        bottom: 50% !important;
+    }
+</style>
+<section class="inner_con mart100 whbg" style="margin-top: 0;padding-top: 0; padding-bottom: 0;">		
+	<div class="container clr ord_dt" style="    padding: 0;">
+		<!-- <h3 *ngIf="this.OrderDetail && this.OrderDetail.store_detail">{{this.OrderDetail.store_detail.name}}</h3> -->
+		<div class="invoice_title">
+			<h5 style="margin-bottom: 30px;" *ngIf="OrderDetail.delivery_type == 1">{{this.OrderDetail.store_detail.name}} <span class="pull-right">{{title.order_no | translate}} #{{OrderDetail.unique_id}}</span></h5>
+			<h5 style="margin-bottom: 30px;" *ngIf="OrderDetail.delivery_type == 2">Courier <span class="pull-right">{{title.order_no | translate}} #{{OrderDetail.unique_id}}</span></h5>
+		</div>
+		<!-- <div class="ord_num">{{this.OrderDetail.store_detail.name}} ({{title.order_no | translate}} #{{OrderDetail.unique_id}})</div> -->
+		<div class="row clr" *ngIf="OrderDetail.delivery_type == 1" style="    margin: 0;">
+			<div class="width20">
+				<h6>{{title.order_accepted | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.order_status > ORDER_STATE.WAITING_FOR_ACCEPT_STORE">
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.order_status == ORDER_STATE.WAITING_FOR_ACCEPT_STORE"><span></span></div>
+						<span (click)="selected_screen=1" *ngIf="OrderDetail.order_status > ORDER_STATE.WAITING_FOR_ACCEPT_STORE"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="date_time.length>0">{{accepted_time | date: "dd MMM hh:mm a"}}</h6>
+			</div>
+			<!-- <div class="width20">
+				<h6>{{title.hopper_selected | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.order_status >= ORDER_STATE.OREDER_READY">
+						<div class="gray_bg" *ngIf="OrderDetail.order_status < ORDER_STATE.OREDER_READY"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.order_status > ORDER_STATE.WAITING_FOR_ACCEPT_STORE"><span></span></div>
+						<span *ngIf="OrderDetail.order_status >= ORDER_STATE.OREDER_READY"><img src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+			</div> -->
+			<div class="width20">
+				<h6>{{title.order_prepared | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.order_status >= ORDER_STATE.OREDER_READY">
+						<div class="gray_bg" *ngIf="OrderDetail.order_status == ORDER_STATE.WAITING_FOR_ACCEPT_STORE"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.order_status > ORDER_STATE.WAITING_FOR_ACCEPT_STORE"><span></span></div>
+						<span (click)="selected_screen=1" *ngIf="OrderDetail.order_status >= ORDER_STATE.OREDER_READY"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="date_time.length>0">{{ready_time | date: "dd MMM hh:mm a"}}</h6>
+			</div>
+			<div class="width20">
+				<h6>{{title.hopper_on_the_way | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_STARTED_DELIVERY && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED">
+						<div class="gray_bg" *ngIf="(OrderDetail.request_status == 0 || OrderDetail.request_status < ORDER_STATE.DELIVERY_MAN_STARTED_DELIVERY || OrderDetail.request_status > ORDER_STATE.ORDER_COMPLETED)"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.request_status >= ORDER_STATE.OREDER_READY"><span></span></div>
+						<span (click)="get_deliveryman_data()" *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_STARTED_DELIVERY && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="date_time.length>0">{{deliveryman_on_the_way_time | date: "dd MMM hh:mm a"}}</h6>
+
+			</div>
+			<div class="width20">
+				<h6>{{title.order_received | translate}}</h6>
+				<div class="doted ">
+					<div class="spac" [class.cheked_div]="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_ARRIVED_AT_DESTINATION && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED">
+						<div class="gray_bg" *ngIf="OrderDetail.request_status == 0 || OrderDetail.request_status < ORDER_STATE.DELIVERY_MAN_ARRIVED_AT_DESTINATION || OrderDetail.order_status > ORDER_STATE.OREDER_READY"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_ACCEPTED && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><span></span></div>
+						<span *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_ARRIVED_AT_DESTINATION && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="!is_get_code" style="cursor: pointer;" (click)="is_get_code=true">{{title.get_code | translate}}</h6>
+				<h6 class="date_font" *ngIf="is_get_code">{{OrderDetail.confirmation_code_for_complete_delivery}}</h6>
+
+			</div>
+		</div>
+
+		<div class="row clr" *ngIf="OrderDetail.delivery_type == 2" style="    margin: 0;">
+			<div class="width20">
+				<h6>{{title.order_accepted | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.request_status > ORDER_STATE.WAITING_FOR_DELIVERY_MAN && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED">
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.request_status >= ORDER_STATE.WAITING_FOR_DELIVERY_MAN"><span></span></div>
+						<span (click)="selected_screen=1" *ngIf="OrderDetail.request_status > ORDER_STATE.DELIVERY_MAN_ACCEPTED && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="date_time.length>0">{{provider_accepted_time | date: "dd MMM hh:mm a"}}</h6>
+			</div>
+			<!-- <div class="width20">
+				<h6>{{title.hopper_selected | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.order_status >= ORDER_STATE.OREDER_READY">
+						<div class="gray_bg" *ngIf="OrderDetail.order_status < ORDER_STATE.OREDER_READY"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.order_status > ORDER_STATE.WAITING_FOR_ACCEPT_STORE"><span></span></div>
+						<span *ngIf="OrderDetail.order_status >= ORDER_STATE.OREDER_READY"><img src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+			</div> -->
+			<div class="width20">
+				<h6>{{title.order_picked | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_PICKED_ORDER && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED">
+						<div class="gray_bg" *ngIf="OrderDetail.request_status >= ORDER_STATE.WAITING_FOR_DELIVERY_MAN"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.request_status == ORDER_STATE.DELIVERY_MAN_ACCEPTED || OrderDetail.request_status == ORDER_STATE.DELIVERY_MAN_COMING || OrderDetail.request_status == ORDER_STATE.DELIVERY_MAN_ARRIVED"><span></span></div>
+						<span (click)="selected_screen=1" *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_PICKED_ORDER 
+						&& OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="date_time.length>0">{{picked_time | date: "dd MMM hh:mm a"}}</h6>
+
+				<h6 class="date_font" *ngIf="!is_get_pick_up_code && !picked_time" style="cursor: pointer;" (click)="is_get_pick_up_code=true">{{title.get_code | translate}}</h6>
+				<h6 class="date_font" *ngIf="is_get_pick_up_code && !picked_time">{{OrderDetail.confirmation_code_for_pick_up_delivery}}</h6>
+
+			</div>
+			<div class="width20">
+				<h6>{{title.hopper_on_the_way | translate}}</h6>
+				<div class="doted">
+					<div class="spac" [class.cheked_div]="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_STARTED_DELIVERY && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED">
+						<div class="gray_bg" *ngIf="(OrderDetail.request_status == 0 || OrderDetail.request_status < ORDER_STATE.DELIVERY_MAN_STARTED_DELIVERY || OrderDetail.request_status > ORDER_STATE.ORDER_COMPLETED)"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_PICKED_ORDER && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><span></span></div>
+						<span (click)="get_deliveryman_data()" *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_STARTED_DELIVERY && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="date_time.length>0">{{deliveryman_on_the_way_time | date: "dd MMM hh:mm a"}}</h6>
+
+			</div>
+			<div class="width20">
+				<h6>{{title.order_received | translate}}</h6>
+				<div class="doted ">
+					<div class="spac" [class.cheked_div]="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_ARRIVED_AT_DESTINATION && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED">
+						<div class="gray_bg" *ngIf="OrderDetail.request_status == 0 || OrderDetail.request_status < ORDER_STATE.DELIVERY_MAN_ARRIVED_AT_DESTINATION || OrderDetail.request_status > ORDER_STATE.ORDER_COMPLETED"><span></span></div>
+						<div class="gray_bg bg_blue" *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_STARTED_DELIVERY && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><span></span></div>
+						<span *ngIf="OrderDetail.request_status >= ORDER_STATE.DELIVERY_MAN_ARRIVED_AT_DESTINATION && OrderDetail.request_status <= ORDER_STATE.ORDER_COMPLETED"><img class="right_icon" src="../assets/images/right_arw_wh.png" alt="" /></span>
+					</div>
+				</div>
+				<h6 class="date_font" *ngIf="!is_get_code" style="cursor: pointer;" (click)="is_get_code=true">{{title.get_code | translate}}</h6>
+				<h6 class="date_font" *ngIf="is_get_code">{{OrderDetail.confirmation_code_for_complete_delivery}}</h6>
+
+			</div>
+		</div>
+		<!-- <div class="ord_link text-center">
+			<a (click)="go_to_full_detail()">{{links.view_details_of_your_order | translate}}</a>
+		</div> -->
+	</div>	
+</section>
+<div *ngIf="selected_screen==1">
+	<div class="cur_order_details ">
+		<div *ngFor="let products of order_detail; let product_index=index; ">
+		    <div class="ord_dt_in clr" *ngFor="let item of products.items; let odd=odd; let item_index=index; ">
+		      <div class="row" style="margin: 0;">
+		        <div class="col_8">
+		          <h6 style="display: inline;margin-right: 10px;">{{item.item_name}} </h6>
+		          <span>({{title.quantity | translate}} : {{item.quantity}})</span>
+		          <!-- {{title.quantity | translate}} : {{item.quantity}} -->
+
+		        </div>
+		        <div class="col_4">
+		          {{OrderDetail.currency}}{{(item.item_price + item.total_specification_price)*item.quantity}}
+		        </div>
+		      </div>
+
+		      <div class="item_dt" *ngFor="let specification of item.specifications">
+		        <h6>{{specification.name}}</h6>
+		        (<span *ngFor="let list of specification.list; let last=last;">{{list.name}}<span *ngIf="!last">, </span></span>)
+		      </div>
+		    </div>
+		</div>
+	</div>
+
+	<!-- <div class="item_dt"> -->
+		<div class="invoice_title"><h5 style="margin-bottom: 10px;">{{title.invoice | translate}}</h5></div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="order_payment.total_service_price > 0">
+	      <div class="col_6"> {{title.service_price | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_service_price).toFixed(2)}} </div>
+	    </div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="order_payment.total_admin_tax_price > 0">
+	      <div class="col_6"> {{title.service_tax | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_admin_tax_price).toFixed(2)}} </div>
+	    </div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="order_payment.is_promo_for_delivery_service && order_payment.promo_payment > 0">
+	      <div class="col_6"> {{title.promo_bonus | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.promo_payment).toFixed(2)}} </div>
+	    </div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="order_payment.delivery_price > 0">
+	      <div class="col_6"> {{title.total_service_cost | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.delivery_price).toFixed(2)}} </div>
+	    </div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="order_payment.total_cart_price > 0">
+	      <div class="col_6"> {{title.item_price | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_cart_price).toFixed(2)}} </div>
+	    </div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="order_payment.total_store_tax_price > 0">
+	      <div class="col_6"> {{title.item_tax | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_store_tax_price).toFixed(2)}} </div>
+	    </div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="!order_payment.is_promo_for_delivery_service && order_payment.promo_payment > 0">
+	      <div class="col_6"> {{title.promo_bonus | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.promo_payment).toFixed(2)}} </div>
+	    </div>
+	    <div class="ord_total_dt clr mobileinvoice"  *ngIf="order_payment.total_order_price > 0">
+	      <div class="col_6"> {{title.total_item_cost | translate}}</div>
+	      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_order_price).toFixed(2)}} </div>
+	    </div>
+
+	    <div class="ord_total_dt ord_total clr mobileinvoice"><div class="col_6 "> {{title.user_pay_payment | translate}} </div><div class="col_6 fr"> {{OrderDetail.currency}}{{order_payment.total}} </div></div>
+	<!-- </div> -->
+	<div class="invoice_title" style="margin-top: 40px;"><h5 style="margin-bottom: 10px;">{{title.delivery_details | translate}}</h5></div>
+    <div class="ord_total_dt clr">
+      <span class="col_12">{{title.comment | translate}}: {{destination_address.comment}}</span>
+    </div>
+
+    <div class="invoice_title" *ngIf="OrderDetail.image_url && OrderDetail.image_url.length>0" style="margin-top: 40px;"><h5 style="margin-bottom: 10px;">{{title.images | translate}}</h5></div>
+    <div *ngIf="OrderDetail.image_url && OrderDetail.image_url.length>0 " class="ord_total_dt clr row">
+      	<div *ngFor="let image of OrderDetail.image_url;" class="col-md-4">
+      		<a target="_blank" href="{{image}}"><img style="height: 300px;" src="{{image}}" /></a>
+      	</div>
+    </div>
+
+</div>
+<div [hidden]="selected_screen!==2">
+	<div class="row" style="margin-top: 20px;">
+        <div class="col-md-4 col-xs-12 col-sm-12">
+        	<!-- <div style="display: inline;"> -->
+            	<img class="img-circle" style="width: 80px;height: 80px;object-fit: cover;" src="{{ProviderDetail.image_url != '' ? ProviderDetail.image_url : 'default.png'}}" alt="profile">
+            <!-- </div> -->
+            <div style="margin-left: 100px;margin-top: -80px;">
+            	<div>
+	                <label>{{ProviderDetail.first_name}} {{ProviderDetail.last_name}}</label>
+	            </div>
+	            <div style="margin-top: 5px;">
+	                <span style="font-size: 25px;" class="fa fa-star"> </span><span style="font-size: 15px;margin-left: 10px;">{{ProviderDetail.user_rate}}({{ProviderDetail.user_rate_count}})</span>
+	            </div>
+	            
+            </div>
+            <div style="margin-top: 25px;" class="font_15"><span class="font_18">{{title.pickup | translate}}</span> - {{pickup_address.address}}</div>
+        	<div class="font_15"><span class="font_18">{{title.destination | translate}}</span> - {{destination_address.address}}</div>
+        </div>
+        <div class="col-md-8 col-xs-12 col-sm-12">
+        	<div style="margin-top: 20px;">
+		        <div id="map" style="height: 400px;"></div>
+		        <img src="./map_pin_images/Store/store_business_off.png" id="map_pin"/>
+		    </div>
+        </div>
+    </div>
+    
+</div>

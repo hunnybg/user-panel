@@ -1,0 +1,123 @@
+<style>
+.abs_div,.abs_div span{
+    position:absolute;
+    width:100%
+}
+.abs_div{
+    background-color:rgba(0,0,0,.6);
+    left:0;
+    color:#fff;
+    height:100%;
+    top:0
+}
+.abs_div span{
+    top:50%;
+    -ms-transform:translateY(-50%);
+    -webkit-transform:translateY(-50%);
+    transform:translateY(-50%);
+    font-family:ClanPro;
+    font-size:13px
+}
+
+.position_absolute_div{
+	background-color: black;
+    opacity: 0.3;
+}
+
+</style>
+
+<section class="inner_con">
+	<div class="search_part">
+		<div class="serarch_in">
+			<div class="search_l" (click)="toggle_dropdown()">
+				<span class="cat_font">{{get_delivery_type_name()}}</span>
+				<div class="user_dt user_dt1">
+					<ul>
+						<li *ngFor="let delivery of deliveries_in_city;" (click)="change_delivery_type(delivery._id)"><a style="padding-left: 0;" [class.selected_category]="delivery._id == delivery_type_id">{{delivery.delivery_name}}</a></li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="search_r">
+				<div class="container">
+					<form>
+						<div class="form_group">
+							
+							<input type="text" (keyup)="filter_store()" [(ngModel)]="filter_store_name" name="filter_store_name" style="background: url(../assets/images/search-grey.svg) top left no-repeat; background-position-y: 10px;border-bottom: 0;" class="search_background" placeholder="{{placeholder.search | translate}} ">
+							<button *ngIf="!is_show && selected_tag && selected_tag.length>0" class="absolute_filter_icon" (click)="hide_filter()"><img style="height: 17px;" src="../assets/images/filter.svg" alt="" /></button>
+							<button *ngIf="!is_show && selected_tag && selected_tag.length==0" class="absolute_filter_icon" (click)="hide_filter()"><img style="height: 17px;" src="../assets/images/filter-grey.svg" alt="" /></button>
+							<button *ngIf="is_show" class="absolute_filter_icon" (click)="hide_filter()"><img style="height: 17px;" src="../assets/images/close.svg" alt="" /></button>
+						</div>
+					</form>
+				</div>
+			</div>
+
+			<div class="food_list" style="display: none;padding-top: 0; margin-top: 0;">
+				<div class="container">	
+					<a *ngFor="let tag of current_delivery_type.famous_products_tags;" (click)="select_famous_tag(tag)" class="btn" [class.food_list_selected]="selected_tag && selected_tag.indexOf(tag)!=-1"><span *ngIf="tag">{{tag}}</span></a>
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+	
+	<div class="container">	
+		<div class="tab2">
+			<!-- <div class="sort">
+				<span style="padding-right: 100px;" *ngIf="selected_tag.length>0" (click)="clear_all()">{{title.clear_all | translate}}</span>
+				<span (click)="hide_filter()" *ngIf="is_show">{{title.show_filter | translate}}</span>
+				<span (click)="hide_filter()" *ngIf="!is_show">{{title.hide_filter | translate}}</span>
+			</div> -->
+			<div class="tab5 box">
+				
+				<div class="order_list" >
+					<h5>{{current_delivery_type.delivery_name}}</h5>
+					<div class="row clr">
+						<div class="col_4" *ngFor="let store of filtered_store_list;" (click)="get_item_list(store)" [hidden]="!store.is_taking_schedule_order&&user_helper.user_cart.is_schedule_order">
+							<a>
+								<div class="ord_img_div" style="position: relative;">
+									<span class="store_close_back" *ngIf="store.is_store_busy || store.close">
+										<span *ngIf="store.is_store_busy && !store.close" class="store_busy" style="opacity: 1;">{{title.busy | translate}}</span>
+										<span *ngIf="store.close">
+											<span *ngIf="store.nextopentime!==''" style="font-size: 13px;opacity: 1;" class="store_busy">
+												<span>{{title.closed | translate}}</span><br>
+												{{title.reopen_at | translate}} {{store.nextopentime}}
+											</span>
+											<span *ngIf="store.nextopentime==''" style="font-size: 13px;opacity: 1;" class="store_busy">
+												{{title.store_closed_today | translate}}
+											</span>
+										</span>
+									</span>
+									<img src="{{store.image_url != '' ? user_helper.CONSTANT.IMAGE_BASE_URL + store.image_url : 'web_images/store_logo.png'}}" [class.position_absolute_div]="store.is_store_busy" />
+								</div>
+								<h6>{{store.name}}</h6>
+								<div class="ord_details">
+									<span *ngFor="let int of range(store.price_rating)">{{delivery_currency}}</span>
+									<span>•</span> <span *ngFor="let i of store.famous_products_tags;">{{i}}  </span>
+								</div>
+								<div class="ord_details">
+									<span class="white_back">{{store.delivery_time}} - {{store.delivery_time_max}} {{title.min | translate}}</span>
+									<span class="white_back group2">{{store.user_rate}} <span class="fa fa-star"></span> ({{store.user_rate_count}})</span>
+								</div>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+				<!--<div class="tab6 box">-->
+					<!--666-->
+				<!--</div>-->
+				<!--<div class="tab7 box">-->
+					<!--7777-->
+				<!--</div>-->
+				<!--<div class="tab8 box">-->
+					<!--8888-->
+				<!--</div>-->
+				<!--<div class="tab9 box">-->
+					<!--999-->
+				<!--</div>			-->
+						
+		</div>
+	</div>		
+</section>

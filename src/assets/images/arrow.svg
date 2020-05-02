@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="11px" height="18px" viewBox="0 0 11 18" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch Beta 51.2 (57516) - http://www.bohemiancoding.com/sketch -->
+    <title>Icon</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Action---Back" transform="translate(-9.000000, -5.000000)" fill="#393E39" fill-rule="nonzero">
+            <path d="M11.7159903,14 L18.7954951,21.0795049 C19.234835,21.5188447 19.234835,22.2311553 18.7954951,22.6704951 C18.3561553,23.109835 17.6438447,23.109835 17.2045049,22.6704951 L9.32950487,14.7954951 C8.89016504,14.3561553 8.89016504,13.6438447 9.32950487,13.2045049 L17.2045049,5.32950487 C17.6438447,4.89016504 18.3561553,4.89016504 18.7954951,5.32950487 C19.234835,5.7688447 19.234835,6.4811553 18.7954951,6.92049513 L11.7159903,14 Z" id="Icon"></path>
+        </g>
+    </g>
+</svg>

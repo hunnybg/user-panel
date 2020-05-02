@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="26px" height="27px" viewBox="0 0 26 27" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch Beta 50.1 (55040) - http://www.bohemiancoding.com/sketch -->
+    <title>user</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Tab4-Selected" transform="translate(-16.000000, 0.000000)">
+            <g id="user" transform="translate(17.000000, 1.000000)">
+                <path d="M12,24 C18.627417,24 24,18.627417 24,12 C24,5.372583 18.627417,0 12,0 C5.372583,0 0,5.372583 0,12 C0,18.627417 5.372583,24 12,24 Z" id="Icon-Copy" stroke="#96CFEE" stroke-width="1.5" fill="#96CFEE" fill-rule="nonzero"></path>
+                <path d="M20,21 C20,18.790861 18.209139,17 16,17 L8,17 C5.790861,17 4,18.790861 4,21 C3.86972556,23.6428236 6.53639222,24.9642354 12,24.9642354 C17.4636078,24.9642354 20.1302744,23.6428236 20,21 Z" id="Shape" stroke="#FFFFFF" stroke-width="1.5" fill="#FFFFFF" stroke-linecap="round" stroke-linejoin="round"></path>
+                <circle id="Oval" fill="#FFFFFF" cx="12" cy="9" r="4"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

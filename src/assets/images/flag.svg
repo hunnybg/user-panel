@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="20px" viewBox="0 0 30 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch Beta 50.1 (55040) - http://www.bohemiancoding.com/sketch -->
+    <title>Flag</title>
+    <desc>Created with Sketch Beta.</desc>
+    <defs></defs>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Input---Phone" transform="translate(0.000000, -15.000000)">
+            <g id="Flag" transform="translate(0.000000, 15.000000)">
+                <path d="M1.498,19.5771 L28.502,19.5771 C29.329,19.5771 30,18.9061 30,18.0781 L30,1.4981 C30,0.6711 29.329,0.0001 28.502,0.0001 L1.498,0.0001 C0.671,0.0001 0,0.6711 0,1.4981 L0,18.0781 C0,18.9061 0.671,19.5771 1.498,19.5771" id="Fill-1" fill="#C6001E"></path>
+                <polygon id="Fill-3" fill="#FFFFFF" points="8.8847 7.9531 13.1657 7.9531 13.1657 3.6701 16.8377 3.6701 16.8377 7.9531 21.1187 7.9531 21.1187 11.6241 16.8377 11.6241 16.8377 15.9051 13.1657 15.9051 13.1657 11.6241 8.8847 11.6241"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

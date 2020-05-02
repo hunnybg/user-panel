@@ -1,0 +1,141 @@
+<div [hidden]="!user_helper.user_cart.myLoading" style="position: fixed; height: 100%; width: 100%; background-color: black; z-index: 9999; opacity: 0.3">
+	<img [hidden]="!user_helper.user_cart.myLoading" src="../assets/images/loading.gif" style="position: fixed;z-index: 72;left: calc(50vw - 100px);
+    top: calc(50vh - 100px);">
+</div>
+
+<!-- <div [hidden]="device_type==''">
+	<div class="col-md-2">
+		<img src = "web_images/title_image.png" alt="Logo">
+	</div>
+	<div class="col-md-6">
+		E-Delivery
+	</div>
+	<div class="col-md-4">
+		<div>
+			<a href="app_url">Install</a>
+		</div>
+	</div>
+</div> -->
+
+<div class="home" [class.home]="!bln.isHome">
+<header class="sticky shop bod_btm_h" [class.sticky]="!bln.isSticky" [class.bod_btm_h]="!bln.isBod_btm_h">
+	<div class="container" [class.container_padding]="!bln.isHome">
+		<div class="fl">
+			<h1><a routerLink="/home"><img src = "web_images/user_logo.png" style="width: 70px;" alt="Logo"><img src= "web_images/user_logo.png" alt="Logo" class="sticky_logo"></a></h1>	
+			<nav>					
+				<input type="checkbox" id="menuToggle">
+				<label for="menuToggle" class="menuOpen show-menu">
+					<div class="open"></div>
+				</label>			
+				<ul id="menu" class="clr">
+					<li><a routerLink = "/home" routerLinkActive="active">{{menu_title.order | translate}}</a></li>
+					<!-- <li><a routerLink = "/partner" routerLinkActive="active">{{menu_title.partners | translate}}</a></li>
+					<li><a routerLink = "/hopper" routerLinkActive="active">{{menu_title.hoppers | translate}}</a></li> -->
+					<!-- <li><a routerLink="/faq" routerLinkActive="active" *ngIf="!bln.showLink">{{menu_title.hop | translate}}</a></li> -->
+				</ul>
+			</nav>	
+			
+		</div>
+		<div class="fr">
+			<ngbd-modal-basic *ngIf="user_helper.user_cart.user_id=='' && user_helper.router.url !== '/basket'"></ngbd-modal-basic>
+			<div class="cart add_product" (click)="user_helper.basket()" [class.add_product]="user_helper.user_cart.cart_data.total_item>0" >
+				<a *ngIf="bln.cart"><img src = "../assets/images/basket-empty-white-background.svg" style="height: 35px;" alt="cart"></a>
+				<a *ngIf="!bln.cart"><img src = "../assets/images/basket-empty-blue-background.svg" style="height: 35px;" alt="cart"></a>
+				<div class="add_pro_dt">
+					<a *ngIf="bln.cart"><img src = "../assets/images/basket-full-white-background.svg" style="height: 35px;" alt="cart"></a>
+					<a *ngIf="!bln.cart"><img src = "../assets/images/basket-full-blue-background.svg" style="height: 35px;" alt="cart"></a>
+					<!-- <a><img src = "../assets/images/active_cart.png" /></a> -->
+					<div class="num green" [class.green]="!bln.isGreen">{{user_helper.user_cart.cart_data.total_item}}</div>
+				</div>
+			</div>
+
+			<div class="login" *ngIf="user_helper.user_cart.user_id!==''">
+				<a *ngIf="bln.cart"><img src = "../assets/images/user-active-blue.svg" style="width: 40px;height: 40px;margin-top: 15px;" alt="user_login" id="u_login" /></a>
+				<a *ngIf="!bln.cart"><img src = "../assets/images/user-active-blue-background.svg" style="width: 40px;height: 40px;margin-top: 12px;" alt="user_login" id="u_login" /></a>
+				<div class="user_dt">
+					<ul>
+						<li class="profile"><a routerLink = "/profile">{{menu_title.profile | translate}}</a></li>
+						<!-- <li class="addresses1"><a routerLink = "/addresses">{{menu_title.addresses | translate}}</a></li> -->
+						<li class="payments"><a routerLink = "/payments">{{menu_title.payments | translate}}</a></li>
+						<li class="order" style="padding: 0;margin: 0;margin-bottom: 0px;"><a routerLink = "/orders">{{menu_title.orders | translate}}</a></li>
+						<li class="fav"><a routerLink = "/favourite_stores">{{menu_title.favorites | translate}}</a></li>
+						<li class="logout"><a (click)="user_helper.logout()">{{menu_title.logout | translate}}</a></li>
+					</ul>
+				</div>
+			</div>
+			<!-- <div class="language">
+				<a [class.active]="selected_language=='fr'" (click)="change_language('fr')">{{title.fr}}</a>
+				<a [class.active]="selected_language=='en'" (click)="change_language('en')">{{title.en}}</a>
+			</div> -->
+		</div>
+		<div class="head_mid" >
+			<div class="soon_div" [hidden]='bln.showhedmid'>
+				<button class="soon_btn dropdown" *ngIf="!is_schedule_order" (click)="asap()">{{button.as_soon_as_possible | translate}}</button>
+				<button class="soon_btn dropdown" *ngIf="is_schedule_order" (click)="asap()">{{user_helper.user_cart.clicked_date}}</button>
+				<div class="dropdown_div" style="display:none;">
+					<div class="drop_row asap" (click)="set_order_time(false)"><a href="#"><i class="fa fa-clock-o"></i> {{title.as_soon_as_possible | translate}}</a><span><img src = "../assets/images/checked.png" /></span></div>
+					<div class="drop_row schedule"><a href="#"><i class="fa fa-calendar"></i> {{title.schedule_an_order | translate}}</a><span><img src = "../assets/images/checked.png" alt="check" /></span></div>
+					<div class="drop_form" style="display:none;">
+						<form class="clr row">
+							<div class="form_group col_4" style="padding-right: 0;">
+								<div class="select_div">
+									<label>{{label.date | translate}}:</label>
+									<div class="overflow_div">
+										<dl class="dropdown2">
+											<dt><a id="date"><span>{{clicked_date}}</span></a></dt>
+											<dd>
+												<ul style="height: 200px;overflow: auto;">
+													<li *ngFor="let date of date_array;" (click)="set_date(date)"><a>{{date.date_format}}</a></li>
+												</ul>
+											</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+							<div class="form_group col_4">
+								<div class="select_div">
+									<label>{{label.hour | translate}}:</label>
+									<div class="overflow_div">
+										<dl class="dropdown2">
+											<dt><a id="time"><span>{{schedule_time}}</span></a></dt>
+											<dd>
+												<ul style="height: 200px;overflow: auto;" >
+													<li *ngFor="let time of time_array;" (click)="set_time(time)"><a>{{time.time_format}}</a></li>
+												</ul>
+											</dd>
+										</dl>
+									</div>
+								</div>
+							</div>
+							
+						</form>
+					</div>
+				<div *ngIf="schedule_time_error" style="margin-left: 17px;">
+					<div style="color: red;" >{{title.invalid_date_time | translate}}</div>
+				</div>
+
+				</div>
+			</div>
+			<div class="top_form" [hidden]='bln.address'>
+				<form>
+					<div class="form_group" style="padding-right: 0;">
+						<!-- <img src="../assets/images/map.png" alt="place" class="place_icon" /> -->
+						<input type="text" style="background: url(../assets/images/map.svg) top left no-repeat;height: 30px;padding-left: 25px;padding-right: 25px;" [(ngModel)]="user_helper.router_id.user_current_location.address" #address="ngModel" name="address" id="address" class="addr" placeholder="{{placeholder.enter_an_address}}">
+						<button  (click)="set_current_location()" style="top: 1px;"><img src = "../assets/images/geolocation-blue-full.svg" alt="mail" /></button>
+						<!--<div class="address_box dropdown_div">-->
+							<!--<div class="addresses">-->
+								<!--<div class="selected">Use current location <img src = "../assets/images/mail.png" alt="mail" /></div>-->
+							<!--</div>-->
+							<!--<div class="addresses">Rue des charmettes 6, Carouge</div>-->
+							<!--<div class="addresses">Rue des charpantiers, Morges</div>-->
+							<!--<div class="addresses">Rue des Chaudronniers, Geneva</div>-->
+						<!--</div>-->
+					</div>
+				</form>
+			</div>
+
+		</div>
+	</div>
+</header>
+</div>
+

@@ -1,0 +1,82 @@
+<section class="inner_con mart100 whbg" style="margin-top: 0;padding-top: 0; padding-bottom: 0;">   
+  <div class="container clr ord_dt" style="    padding: 0;">
+    <div class="invoice_title" *ngIf="this.OrderDetail.store_detail"><h5 style="margin-bottom: 30px;">{{this.OrderDetail.store_detail.name}} ({{title.order_no | translate}} #{{OrderDetail.unique_id}})</h5></div>
+    <div class="invoice_title" *ngIf="!this.OrderDetail.store_detail"><h5 style="margin-bottom: 30px;">{{title.courier | translate}} ({{title.order_no | translate}} #{{OrderDetail.unique_id}})</h5></div>
+  </div>  
+</section>
+
+<div class="cur_order_details ">
+  <div *ngFor="let products of order_detail; let product_index=index; ">
+      <div class="ord_dt_in clr" *ngFor="let item of products.items; let odd=odd; let item_index=index; ">
+        <div class="row" style="margin: 0;">
+          <div class="col_8">
+            <h6>{{item.item_name}} x {{item.quantity}}</h6>
+            <!-- {{title.quantity | translate}} : {{item.quantity}} -->
+
+          </div>
+          <div class="col_4">
+            {{OrderDetail.currency}}{{(item.item_price + item.total_specification_price)*item.quantity}}
+          </div>
+        </div>
+
+        <div class="item_dt" *ngFor="let specification of item.specifications">
+          <h6>{{specification.name}}</h6>
+          (<span *ngFor="let list of specification.list; let last=last;">{{list.name}}<span *ngIf="!last">, </span></span>)
+        </div>
+      </div>
+  </div>
+</div>
+
+<!-- <div class="item_dt"> -->
+  <div class="invoice_title"><h5 style="margin-bottom: 10px;">{{title.invoice | translate}}</h5></div>
+    <div class="ord_total_dt clr"  *ngIf="order_payment.total_service_price > 0">
+      <div class="col_6"> {{title.service_price | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_service_price).toFixed(2)}} </div>
+    </div>
+    <div class="ord_total_dt clr"  *ngIf="order_payment.total_admin_tax_price > 0">
+      <div class="col_6"> {{title.service_tax | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_admin_tax_price).toFixed(2)}} </div>
+    </div>
+    <div class="ord_total_dt clr"  *ngIf="order_payment.is_promo_for_delivery_service && order_payment.promo_payment > 0">
+      <div class="col_6"> {{title.promo_bonus | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.promo_payment).toFixed(2)}} </div>
+    </div>
+    <div class="ord_total_dt clr"  *ngIf="order_payment.delivery_price > 0">
+      <div class="col_6"> {{title.total_service_cost | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.delivery_price).toFixed(2)}} </div>
+    </div>
+    <div class="ord_total_dt clr"  *ngIf="order_payment.total_cart_price > 0">
+      <div class="col_6"> {{title.item_price | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_cart_price).toFixed(2)}} </div>
+    </div>
+    <div class="ord_total_dt clr"  *ngIf="order_payment.total_store_tax_price > 0">
+      <div class="col_6"> {{title.item_tax | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_store_tax_price).toFixed(2)}} </div>
+    </div>
+    <div class="ord_total_dt clr"  *ngIf="!order_payment.is_promo_for_delivery_service && order_payment.promo_payment > 0">
+      <div class="col_6"> {{title.promo_bonus | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.promo_payment).toFixed(2)}} </div>
+    </div>
+    <div class="ord_total_dt clr"  *ngIf="order_payment.total_order_price > 0">
+      <div class="col_6"> {{title.total_item_cost | translate}}</div>
+      <div class="col_6 fr">{{OrderDetail.currency}}{{(order_payment.total_order_price).toFixed(2)}} </div>
+    </div>
+
+    <div class="ord_total_dt ord_total clr"><div class="col_6"> {{title.total | translate}} </div><div class="col_6 fr"> {{OrderDetail.currency}}{{order_payment.user_pay_payment}} </div></div>
+<!-- </div> -->
+<div class="invoice_title" style="margin-top: 40px;"><h5 style="margin-bottom: 10px;">{{title.delivery_details | translate}}</h5></div>
+<!-- <div class="item_dt"> -->
+    <!-- <h6>{{title.delivery_details}}</h6> -->
+    <div class="ord_total_dt clr">
+      <span class="col_12">{{destination_address.address}}</span><br>
+      <!-- <span>{{title.floor | translate}}: {{destination_address.floor}}, {{title.entry_code | translate}}: {{destination_address.entry_code}}</span><br> -->
+      <span class="col_12">{{title.comment | translate}}: {{destination_address.comment}}</span>
+    </div>
+
+    <div class="invoice_title" *ngIf="OrderDetail.image_url && OrderDetail.image_url.length>0" style="margin-top: 40px;"><h5 style="margin-bottom: 10px;">{{title.images | translate}}</h5></div>
+    <div *ngIf="OrderDetail.image_url && OrderDetail.image_url.length>0 " class="ord_total_dt clr row">
+        <div *ngFor="let image of OrderDetail.image_url;" class="col-md-4">
+          <a target="_blank" href="{{image}}"><img style="height: 300px;" src="{{image}}" /></a>
+        </div>
+    </div>
+<!-- </div> -->

@@ -1,0 +1,99 @@
+
+  <div class="pro_title" *ngIf="!show_add_card">
+    <!--<h6>{{title.payments | translate}}</h6>-->
+    <!--<a class="edit">{{links.edit}}</a>-->
+  </div>
+  <div class="pro_dt" *ngIf="!show_add_card">
+    <form>
+
+      <h6 style="margin-bottom: 0;">{{title.wallet}} <a *ngIf="!show_add_wallet" class="add_link" (click)="add_wallet_modal()">{{links.add}}</a></h6>
+        <!-- <p *ngIf="!show_add_wallet" [innerHTML] = "description.payment_des"></p> -->
+        <div *ngIf="show_add_wallet" class="form_group">
+          <input type="text" (keypress)="helper.number_validation($event)" name="new_wallet_amount" id="new_wallet_amount" [(ngModel)]="new_wallet_amount" placeholder="{{title.amount | translate}}" required>
+          
+          <button class="submit_btn" (click)="add_wallet_service()">{{button.submit | translate}}</button>
+        </div>
+        <div class="validation_error">{{wallet_error}}
+          </div>
+
+        <div class="clr balance" *ngIf="!show_add_wallet">
+          <div class="col_8">
+            {{wallet.toFixed(2)}} {{wallet_currency_code}}
+          </div>
+          <!-- <div class="col_4">
+            {{wallet.toFixed(2)}} {{wallet_currency_code}}
+          </div> -->
+        </div>
+
+      <h6>{{title.credit_cards | translate}}</h6>
+
+        <div class="form_group" *ngFor="let card of card_list; let card_index=index;">
+          <input type="text" readonly value="XXXX XXXX XXXX {{card.last_four}} {{card.card_type}}" name="" (click)="select_card(card._id , card_index)" style="cursor: pointer;">
+          <button style="margin-right: 50px; margin-top: 5px;" *ngIf="card.is_default"><img src="../assets/images/checked.png" alt="" height="28px" width="28px" class="chk" /></button>
+          <img src="../assets/images/cross.png" class="cross_img" (click)="delete_card(card._id, card_index)"  style="display: block;" />
+        </div>
+        
+
+      <button class="add_btn blue_btn btn" (click)="add_new_card()">{{button.add_a_card | translate}}</button>
+    </form>
+  </div>
+
+  <div class="pro_title"  *ngIf="show_add_card">
+    <h6>{{title.add_Card | translate}}</h6>
+    <img src="../assets/images/cross.png" class="cross_img" (click)="show_add_card=false" style="display: block;" />
+  </div>
+  <div class="pro_dt edit_data"  *ngIf="show_add_card">
+    <form #addCardForm="ngForm" (ngSubmit)="add_card(addCardForm.value)">
+
+      <div class="form_group">
+        <input type="text" placeholder="{{title.card_holder_name | translate}}" name="card_holder_name" id="card_holder_name" [(ngModel)]="add_card_data.card_holder_name" #card_holder_name="ngModel" required>
+        <div *ngIf="card_holder_name.errors && (card_holder_name.dirty || card_holder_name.touched)" class="validation_error">
+          <div [hidden]="!card_holder_name.errors.required">{{title.this_field_is_required | translate}}
+          </div>
+        </div>
+      </div>
+      <div class="form_group">
+        <input type="text" placeholder="{{title.card_number | translate}}" (keyup)="movetoNext($event , 'expiry_month')" minlength="19" maxlength="19" [(ngModel)]="add_card_data.card_number" #card_number="ngModel" (keypress)="card_number_validation($event)" name="card_number" id="card_number" required>
+        <div *ngIf="card_number.errors && (card_number.dirty || card_number.touched)" class="validation_error">
+          <div [hidden]="!card_number.errors.required">{{title.this_field_is_required | translate}}
+          </div>
+        </div>
+      </div>
+      <div class="form_group row clr">
+        <div class="col_4">
+          <input type="text" placeholder="{{title.expiry_month | translate}}" (keyup)="movetoNext($event , 'expiry_year')" maxlength="2" [(ngModel)]="add_card_data.expiry_month" #expiry_month="ngModel" (keypress)="card_number_validation($event)" name="expiry_month" id="expiry_month" required>
+          <div *ngIf="expiry_month.errors && (expiry_month.dirty || expiry_month.touched)" class="validation_error">
+            <div [hidden]="!expiry_month.errors.required">{{title.this_field_is_required | translate}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col_4">
+          <input type="text" placeholder="{{title.expiry_year | translate}}" (keyup)="movetoNext($event , 'cvv')" maxlength="2" [(ngModel)]="add_card_data.expiry_year" #expiry_year="ngModel" (keypress)="card_number_validation($event)" name="expiry_year" id="expiry_year" required>
+          <div *ngIf="expiry_year.errors && (expiry_year.dirty || expiry_year.touched)" class="validation_error">
+            <div [hidden]="!expiry_year.errors.required">{{title.this_field_is_required | translate}}
+            </div>
+          </div>
+        </div>
+
+        <div class="col_4">
+          <input type="text" placeholder="{{title.cvv | translate}}" maxlength="3" name="cvv" id="cvv" [(ngModel)]="add_card_data.cvv" #cvv="ngModel" (keypress)="card_number_validation($event)" required>
+          <div *ngIf="cvv.errors && (cvv.dirty || cvv.touched)" class="validation_error">
+            <div [hidden]="!cvv.errors.required">{{title.this_field_is_required | translate}}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="payment_type">
+        <p [innerHTML]="description.payment_des2 | translate"></p>
+        <div class="cards">
+          <a><img src="../assets/images/visa.png" /></a>
+          <a><img src="../assets/images/mastercard.png" /></a>
+        </div>
+      </div>
+
+      <div class="validation_error text-center" style="font-size: 15px;margin-top: 15px;">{{card_error}}</div>
+
+      <button type="submit" [disabled]="addCardForm.invalid" class="add_btn blue_btn btn save_b">{{button.save_b | translate}}</button>
+    </form>
+  </div>

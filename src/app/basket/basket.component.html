@@ -1,0 +1,680 @@
+
+<section class="inner_con order_dt mart100">		
+	<div class="container">
+		<div class="clr">
+			<button id="order_amount_invalid" (click)="open(order_amount_invalid)"></button>
+			<div class="col_6" *ngIf="user_helper.user_cart.cart_data.total_item<=0">
+				<h3>{{title.your_basket | translate}}</h3>
+
+				<div class="text-center">
+					<h4 style="color: #000;font-size: 20px;margin-bottom: 0;">{{title.basket_empty | translate}}</h4>
+					<span style="font-size: 13px;color: black;">{{title.go_to_shop | translate}}</span>
+					<div style="margin-top: 12px;" (click)="go_to_order()"><span class="btn blue_btn">{{button.order | translate}}</span></div>
+				</div>
+			</div>
+
+			<div class="col_6" *ngIf="user_helper.user_cart.cart_data.total_item>0">
+				<div class="basket_div">
+					<h3>{{title.your_basket | translate}}</h3>
+
+					<div *ngFor="let cart_product of user_helper.user_cart.cart_data.cart; let product_index=index;">
+						<div class="ord_in" *ngFor="let cart_item of cart_product.items; let item_index=index;">
+							<div class="ord_top clr" >
+								<div class="col_8 remove_padding" (click)="open_edit_item_modal(content6, cart_item, cart_product, item_index, product_index)">
+									<h6>{{cart_item.item_name}}</h6>
+								</div>
+								<div class="col_4 remove_padding fr">
+									<div class="p_price">
+										{{user_helper.router_id.user.currency}}{{cart_item.total_item_and_specification_price}}
+									</div>
+									
+								</div>
+							</div>
+							<!--<div class="ord_mid">-->
+							<!--<p [innerHTML] = "ordlist.ord_des"></p>-->
+							<!--</div>-->
+							<div class="ord_btm clr">
+								<div class="col_9">
+									<!-- <a (click)="open_edit_item_modal(content6, cart_item, cart_product, item_index, product_index)">{{button.modify | translate}}</a> -->
+									<a (click)="remove_from_cart(product_index, item_index)" class="remove">{{button.remove | translate}}</a>
+								</div>
+								<div class="col_3 fr">
+									<div class="value"><button class="minus" (click)="decrease_qty(product_index, item_index)"> <img src="../assets/images/minus_c.png" alt="" /> </button> <span>{{cart_item.quantity}}</span> <button class="plus" (click)="increase_qty(product_index, item_index)"> <img src="../assets/images/plus_c.png" alt="" /> </button></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col_6">
+				<div class="dl_dt">
+					<div><h5>{{title.delivery_time | translate}}</h5></div>
+					<div class="bod_btm">
+						<a class="asap date_time dropdown" (click)="asap()" *ngIf="!user_helper.user_cart.is_schedule_order">
+							{{title.as_soon_as_possible | translate}}
+						</a>
+						<a class="asap date_time dropdown" (click)="asap()" *ngIf="user_helper.user_cart.is_schedule_order">
+							{{user_helper.user_cart.clicked_date}}
+						</a>
+						<div class="dropdown_div" style="display:none;">
+							<div class="drop_row asap" (click)="set_order_time(false)"><a><i class="fa fa-clock-o"></i> {{title.as_soon_as_possible | translate}}</a><span><img src = "../assets/images/checked.png"  class="rightsign"/></span></div>
+							<div class="drop_row schedule"><a><i class="fa fa-calendar"></i> {{title.schedule_an_order | translate}}</a><span><img src = "../assets/images/checked.png" alt="check"  class="rightsign" height="28px"/></span></div>
+							<div class="drop_form" style="display:none;">
+								<form class="clr row">
+									<div class="form_group col_12" style="padding-right: 0;">
+										<div class="select_div">
+											<label>{{label.date | translate}}:</label>
+											<div class="overflow_div">
+												<dl class="dropdown2">
+													<dt><a id="date"><span>{{clicked_date}}</span></a></dt>
+													<dd>
+														<ul style="height: 200px;overflow: auto;">
+															<li *ngFor="let date of date_array;" (click)="set_date(date)"><a>{{date.date_format}}</a></li>
+														</ul>
+													</dd>
+												</dl>
+											</div>
+										</div>
+									</div>
+									<div class="form_group col_12">
+										<div class="select_div">
+											<label>{{label.hour | translate}}:</label>
+											<div class="overflow_div">
+												<dl class="dropdown2 times">
+													<dt><a id="time"><span>{{schedule_time}}</span></a></dt>
+													<dd>
+														<ul style="height: 200px;overflow: auto;" >
+															<li *ngFor="let time of time_array;" (click)="set_time(time)"><a>{{time.time_format}}</a></li>
+														</ul>
+													</dd>
+												</dl>
+											</div>
+										</div>
+									</div>
+									
+								</form>
+							</div>
+							<div *ngIf="schedule_time_error">
+								<div style="font-size: 15px;" class="validation_error">{{title.schedule_time_error | translate}} {{store_detail.schedule_order_create_after_minute}} {{title.min | translate}}</div>
+							</div>
+							<div *ngIf="!this.store_detail.is_taking_schedule_order && this.user_helper.user_cart.is_schedule_order">
+								<div style="font-size: 15px;" class="validation_error">{{title.store_not_provide_schedule_order | translate}}</div>
+							</div>
+
+						</div>
+					</div>
+					
+					<div class="form_div">
+						<!-- <a class="position" (click)="get_address()" style="border-bottom: 2px solid #f5f6f7;margin-bottom: 10px; padding-bottom: 10px;" ><img src="../assets/images/home.png" alt="" />{{title.use_an_address | translate}}<img *ngIf="use_an_address" src="../assets/images/checked.png" alt="check" class="checked" /></a>
+
+						<div *ngIf="use_an_address">
+							<a *ngFor="let address of favourite_addresses;" [class.selected_address]="selected_address_id==address._id" class="position" style="border-bottom: 2px solid #f5f6f7;margin-bottom: 10px; padding-bottom: 10px;" (click)="set_address(address)">
+								<span style="font-size: 15px;">{{address.address_name}}</span><br>
+								<span style="font-size: 20px;">{{address.address}}</span>
+							</a>
+						</div>
+
+						<a class="position" style="border-bottom: 2px solid #f5f6f7;margin-bottom: 10px; padding-bottom: 10px;" (click)="set_current_location()"><img src="../assets/images/pos_h.png" alt="" />{{title.use_your_position | translate}}<img *ngIf="!use_an_address" src="../assets/images/checked.png" alt="check" class="checked" /></a> -->
+						<div><h5>{{title.delivery_details | translate}}</h5></div>
+						<form>
+							<!-- <div class="form_group">
+								<input type="text"  name="delivery_user_name" [(ngModel)]="delivery_user_name" placeholder="{{placeholder.name_it | translate}}" />
+							</div> -->
+							<div class="form_group row clr">
+								<div class="col_6">
+									<input type="text" name="delivery_user_name" [(ngModel)]="delivery_user_name" placeholder="{{placeholder.name_it | translate}}" />
+								</div>
+								<div class="col_6">
+									<input type="text" name="delivery_user_phone" [(ngModel)]="delivery_user_phone" placeholder="{{placeholder.phone | translate}}" />
+								</div>
+							</div>
+							<div class="form_group pad20">
+								<input type="text" id="basket_address"  name="delivery_address" [(ngModel)]="delivery_address" placeholder="{{placeholder.delivery_address | translate}}" />
+								<button (click)="set_current_location()"><img style="height: 20px;" src="../assets/images/navigation.svg" alt="" /></button>
+							</div>
+							<div class="form_group">
+								<input type="text" name="delivery_note" [(ngModel)]="delivery_note" placeholder="{{placeholder.comment_for_the_hopper | translate}}" />
+							</div>
+
+							<!-- <div class="promo_code"><a>{{links.promo_code | translate}} ?</a></div> -->
+							<div class="form_group">
+								<input type="text" [(ngModel)]="promocode" name="promocode" [disabled]="user_id=='' || promo_applied==true" placeholder="{{links.promo_code | translate}}" />
+								<button type="button" *ngIf="!promo_applied" [disabled]="promocode==''" (click)="check_promo()">{{button.apply}}</button>
+								<button type="button"><img *ngIf="promo_applied" src="../assets/images/checked.png" alt="check" class="checked rightsign"/></button>
+							</div>
+
+							<div><h5>{{title.invoice | translate}}</h5></div>
+
+							<div class="ord_total_dt clr" *ngIf="order_payment.total_service_price > 0">
+								<div class="col_6">
+									{{title.service_price | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.total_service_price).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt clr" *ngIf="order_payment.total_admin_tax_price > 0">
+								<div class="col_6">
+									{{title.service_tax | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.total_admin_tax_price).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt clr" *ngIf="order_payment.is_promo_for_delivery_service && order_payment.promo_payment > 0">
+								<div class="col_6">
+									{{title.promo_bonus | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.promo_payment).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt clr" *ngIf="order_payment.delivery_price > 0">
+								<div class="col_6">
+									{{title.total_service_cost | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.delivery_price).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt clr" *ngIf="order_payment.total_cart_price > 0">
+								<div class="col_6">
+									{{title.item_price | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.total_cart_price).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt clr" *ngIf="order_payment.total_store_tax_price > 0">
+								<div class="col_6">
+									{{title.item_tax | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.total_store_tax_price).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt clr" *ngIf="!order_payment.is_promo_for_delivery_service && order_payment.promo_payment > 0">
+								<div class="col_6">
+									{{title.promo_bonus | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.promo_payment).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt clr">
+								<div class="col_6">
+									{{title.total_item_cost | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{(order_payment.total_order_price).toFixed(2)}}
+								</div>
+							</div>
+							<div class="ord_total_dt ord_total clr">
+								<div class="col_6">
+									{{title.total | translate}}
+								</div>
+								<div class="col_6 fr">
+									{{delivery_currency}}{{order_payment.user_pay_payment}}
+								</div>
+							</div>
+							<!-- <div class="promo_code" *ngIf="user_id!=''"><a>{{title.payment | translate}}</a></div> -->
+
+							<!-- <div class="pay_title">
+								<span class="btn blue_btn" *ngIf="is_cash_payment_mode" [class.text_black]="selected_payment_gateway=='cash'" (click)="selected_payment_gateway='cash'">{{title.cash | translate}}</span>
+								<span *ngFor="let payment of payment_gateway">
+									<span class="btn blue_btn" *ngIf="payment._id == '586f7db95847c8704f537bd5'" [class.text_black]="selected_payment_gateway=='586f7db95847c8704f537bd5'" (click)="selected_payment_gateway='586f7db95847c8704f537bd5'">{{title.card | translate}}</span>
+								</span>
+							</div> -->
+
+							<!-- <div class="form_group" *ngIf="selected_payment_gateway=='586f7db95847c8704f537bd5'">
+								<div *ngFor="let card of card_list; let card_index=index;" (click)="select_card(card._id , card_index)" class="form_group">
+									<input type="text" disabled value="XXXX XXXX XXXX {{card.last_four}} {{card.card_type}}" />
+									<button *ngIf="card.is_default"><img src="../assets/images/checked.png" alt="" /></button>
+								</div>
+							</div> -->
+							
+							<div *ngIf="store_detail.close">
+								<div *ngIf="store_detail.nextopentime!==''" style="font-size: 13px;" class="validation_error">
+									{{title.store_closed | translate}} {{title.reopen_at | translate}} {{store_detail.nextopentime}}
+								</div>
+								<div *ngIf="store_detail.nextopentime==''" style="font-size: 13px;" class="validation_error">
+									{{title.store_closed_today | translate}}
+								</div>
+							</div>
+
+							<div class="sub_btn" *ngIf="user_id!=''" ><button (click)="checK_schedule_order_available(open_payment_method_modal)" class="btn" [disabled]="this.store_detail.close">{{button.payment | translate}} !</button></div>
+							<div class="sub_btn" (click)="open2(content2)" *ngIf="user_id==''"><button class="btn">{{button.login | translate}}</button></div>
+
+						</form>
+					</div>
+				</div>	
+			</div>
+		</div>
+	</div>	
+</section>
+
+<ng-template #order_amount_invalid let-c="close" let-d="dismiss" class="white-popup-block">
+  	<button type="button" class="close" aria-label="Close" id="order_amount_invalid_close" (click)="d('Cross click')">
+	      <span aria-hidden="true">&times;</span>
+	</button>
+	<div class="modal-header">
+	    <h4 class="modal-title" id="modal-basic-title2">{{title.alert | translate}}</h4>                
+	</div>
+	<div class="modal-body">
+		<div class="text-center">
+			<span>{{title.invalid_amount | translate}} {{delivery_currency}}{{mimimum_amount.toFixed(2)}}</span>
+			<div class="sub_btn"><button style="width: 96px;" (click)="redirect_to_checkout()" type="button" class="btn">{{button.ok | translate}}</button></div>
+		</div>
+	</div>
+
+</ng-template>
+<!-- 
+<ng-template #content3 let-c="close" let-d="dismiss" class="white-popup-block">
+  <button type="button" class="close" aria-label="Close" id="login_modal" (click)="d('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title2">{{title.login | translate}}</h4>                
+              </div>
+              <div class="modal-body">
+                 <div class="login_form">
+                    <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm.value)">
+
+                        <div [ngSwitch]="email_placeholder">
+                            <div *ngSwitchCase=1>
+                              <div class="form_group">
+                                  <input type="text" id="email_or_phone" placeholder="{{placeholder.email_phone}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                      <div *ngIf = "email.errors.required">
+                                          {{title.this_field_is_required | translate}}
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                            <div *ngSwitchCase=2>
+                                <div class="form_group">
+                                    <input type="text" id="phone" (keypress)="user_helper.number_validation($event)" placeholder="{{placeholder.phone}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                        <div *ngIf = "email.errors.required">
+                                            {{title.this_field_is_required | translate}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngSwitchCase=3>
+                                <div class="form_group">
+                                    <input type="email" id="email" placeholder="{{placeholder.email}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                        <div *ngIf = "email.errors.required">
+                                            {{title.this_field_is_required | translate}}
+                                        </div>
+                                        <div *ngIf = "email.errors?.email">
+                                            {{title.please_enter_valid_email | translate}}
+                                        </div>
+                                    </div>
+                                    <div *ngIf="email_or_phone_error" class="validation_error">
+                                        <div>{{title.please_enter_valid_email_phone | translate}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      <div class="form_group">
+                        <input type="password"  placeholder="{{placeholder.password}}" name="password" [(ngModel)]="user_login.password" #password="ngModel" minlength="6" required />
+                        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="validation_error">
+                          <div *ngIf = "password.errors.required">
+                              {{title.this_field_is_required | translate}}
+                          </div>
+                          <div *ngIf = "password.errors?.minlength && password.touched">
+                              {{title.password_doesnt_seem_right | translate}}
+                          </div>
+
+                        </div>
+                        <div class="validation_error">{{error_message}}</div>
+                      </div>
+                      <div class="forg_pass"><a href="#"></a></div>
+                      <div class="sub_btn"><button type="submit" class="btn" [disabled]="!loginForm.form.valid" >{{button.login_b}}</button></div>
+                      <div><a class="signup_l popup-with-form"></a></div>
+                    </form>
+                  </div> 
+              </div>
+</ng-template> -->
+
+<ng-template #content let-c="close" let-d="dismiss" class="white-popup-block">
+  <button type="button" class="close"  id="register_modal" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+  </button>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">{{title.sign_up | translate}}</h4>    
+  </div>
+  <div class="modal-body">
+    <div class="login_form">         
+          <form #userForm="ngForm" (ngSubmit)="userRegister(userForm.value)">
+            <div class="form_group">
+              <input type="text"  placeholder="{{placeholder.name | translate}}" name="first_name" [(ngModel)]="user_register.first_name" #first_name="ngModel" required />
+              <div *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)" class="validation_error">
+                  <div *ngIf = "first_name.errors.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+            </div>
+            <div class="form_group">
+                <input type="text"  placeholder="{{placeholder.surame | translate}}" name="last_name" [(ngModel)]="user_register.last_name" #last_name="ngModel" required />
+                <div *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)" class="validation_error">
+                  <div *ngIf = "last_name.errors.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+            </div>
+            <div class="form_group">
+              <input type="email"  placeholder="{{placeholder.email}}" name="email" [(ngModel)]="user_register.email" #email="ngModel" required />
+              <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                  <div *ngIf = "email.errors?.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+                  <div *ngIf = "email.errors?.pattern && email.touched">
+                      {{title.please_enter_valid_email | translate}}
+                  </div>
+              </div>
+            </div>
+            <div class="form_group">
+              <input type="password"  placeholder="{{placeholder.password}}" name="password" [(ngModel)]="user_register.password" #password="ngModel" minlength="6" required />
+              <div *ngIf="password.invalid && (password.dirty || password.touched)" class="validation_error">
+                <div *ngIf = "password.errors?.required">
+                    {{title.this_field_is_required | translate}}
+                </div>
+                <div *ngIf = "password.errors?.minlength && password.touched">
+                    {{title.password_doesnt_seem_right | translate}}
+                </div>
+            </div>
+            </div>
+            <div class="form_group tel">
+              <input type="tel"  placeholder="{{placeholder.number}}" (keypress)="user_helper.number_validation($event)" name="phone" [(ngModel)]="user_register.phone" minlength="9" maxlength="12" #phone="ngModel" required />
+              
+              <select (change)="select_country()" style="position: absolute;left: 5px;top:3px;font-weight: 500;width: 50px;" name="country_phone_code" [(ngModel)]="user_register.country_phone_code" #country_phone_code="ngModel">
+                <option *ngFor="let country of country_list">{{country.country_phone_code}}</option>
+              </select>
+              
+              <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="validation_error">
+                  <div *ngIf = "phone.errors?.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+            </div>
+            <div class="form_group checkbox_div">
+            
+              <label class="check_lb">{{button.agree | translate}} <a  target="_blank" href="/terms.html">{{button.terms_and_condition | translate}}</a> and <a  target="_blank" href="/terms.html">{{button.privacy_policy | translate}}</a><input name="trems" [(ngModel)]="user_register.trems" type="checkbox" #trems="ngModel" required> <span class="checkmark new"></span></label>
+              <div *ngIf="trems.invalid && (trems.dirty || trems.touched)" class="validation_error">
+                <div *ngIf = "trems.errors?.required">
+                    {{title.please_accept_terms_cond_signup | translate}}
+                </div>
+              </div>
+              <div class="validation_error">{{error_message | translate}}</div>
+            </div>
+            <div class="sub_btn"><button class="btn" [disabled]="userForm.invalid">{{button.signup}}</button></div>
+            <div class="acc" (click) = "d('Cross click')"><p>{{title.acount}}</p><a (click)="open2(content2)" class="popup-with-form">{{button.login | translate}}</a>
+            </div>
+
+            
+          </form>
+    
+        </div>
+  </div>
+  </ng-template>
+
+  <ng-template #content2 let-c="close" let-d="dismiss" class="white-popup-block">
+              <button type="button" class="close" aria-label="Close" id="login_modal" (click)="d('Cross click')">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+              <div class="modal-header">
+                <h4 class="modal-title" id="modal-basic-title2">{{title.login}}</h4>                
+              </div>
+              <div class="modal-body">
+                 <div class="login_form">
+                    <form #loginForm="ngForm" (ngSubmit)="userLogin(loginForm.value)">
+
+                        <div [ngSwitch]="email_placeholder">
+                            <div *ngSwitchCase=1>
+                              <div class="form_group">
+                                  <input type="text" id="email_or_phone" placeholder="{{placeholder.email_phone}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                  <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                      <div *ngIf = "email.errors.required">
+                                          {{title.this_field_is_required | translate}}
+                                      </div>
+                                  </div>
+                              </div>
+                            </div>
+                            <div *ngSwitchCase=2>
+                                <div class="form_group">
+                                    <input type="text" id="phone" (keypress)="user_helper.number_validation($event)" placeholder="{{placeholder.phone}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                        <div *ngIf = "email.errors.required">
+                                            {{title.this_field_is_required | translate}}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div *ngSwitchCase=3>
+                                <div class="form_group">
+                                    <input type="email" id="email" placeholder="{{placeholder.email}}" name="email" [(ngModel)]="user_login.email" #email="ngModel" required />
+                                    <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                                        <div *ngIf = "email.errors.required">
+                                            {{title.this_field_is_required | translate}}
+                                        </div>
+                                        <div *ngIf = "email.errors?.email">
+                                            {{title.please_enter_valid_email | translate}}
+                                        </div>
+                                    </div>
+                                    <div *ngIf="email_or_phone_error" class="validation_error">
+                                        <div>{{title.please_enter_valid_email_phone | translate}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                      <div class="form_group">
+                        <input type="password"  placeholder="{{placeholder.password}}" name="password" [(ngModel)]="user_login.password" #password="ngModel" minlength="6" required />
+                        <div *ngIf="password.invalid && (password.dirty || password.touched)" class="validation_error">
+                          <div *ngIf = "password.errors.required">
+                              {{title.this_field_is_required | translate}}
+                          </div>
+                          <div *ngIf = "password.errors?.minlength && password.touched">
+                              {{title.password_doesnt_seem_right | translate}}
+                          </div>
+                        </div>
+                        <div class="validation_error">{{error_message | translate}}</div>
+                      </div>
+                      <div (click) = "d('Cross click')" class="forg_pass"><a (click)="open2(content3)">{{title.forgot_password | translate}}</a></div>
+                      <div class="sub_btn"><button type="submit" class="btn" [disabled]="!loginForm.form.valid" >{{button.login_b}}</button></div>
+                      <div (click) = "d('Cross click')"><a class="signup_l popup-with-form" (click)="open(content)">{{button.signup | translate}}</a></div>
+                    </form>
+                  </div> 
+              </div>
+            </ng-template>
+
+  <ng-template #content4 let-c="close" let-d="dismiss" class="white-popup-block">
+
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title2">{{title.check_your_email | translate}}</h4>                
+    </div>
+    <div class="modal-body">
+      <span class="text-center">
+        {{title.forgot_password_success_message | translate}}
+      </span>
+    </div>
+  </ng-template>
+
+  <ng-template #content3 let-c="close" let-d="dismiss" class="white-popup-block">
+
+    <button type="button" class="close" aria-label="Close" id="forgot_modal" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    <div class="modal-header">
+      <h4 class="modal-title" id="modal-basic-title2">{{title.forgot_password | translate}}</h4>                
+    </div>
+    <div class="modal-body">
+       <div class="login_form">
+          <form #userforgotpasswordForm="ngForm" (ngSubmit)="userForgotPassword(userforgotpasswordForm.value)" >
+            <div class="form_group">
+                <input type="email" id="email" placeholder="{{placeholder.email}}" name="email" [(ngModel)]="user_forgot_password.email" #email="ngModel" required />
+                <div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                    <div *ngIf = "email.errors.required">
+                        {{title.this_field_is_required | translate}}
+                    </div>
+                    <div *ngIf = "email.errors?.email">
+                        {{title.please_enter_valid_email | translate}}
+                    </div>
+                </div>
+            </div>
+            <div class="validation_error">{{error_message}}</div>
+            <div class="forg_pass"><a href="#"></a></div>
+            <button id="success_modal" (click)="open(content4)"></button>
+            <div class="sub_btn"><button type="submit" class="btn" [disabled]="!userforgotpasswordForm.form.valid" >{{button.submit}}</button></div>
+            <div><a class="signup_l popup-with-form"></a></div>
+          </form>
+        </div> 
+    </div>
+  </ng-template>
+
+<ng-template #content6 let-c="close" let-d="dismiss">
+	<button type="button" id="close_item_model1" class="close" aria-label="Close" (click)="d('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<div class="big_img" *ngIf="current_item.image_url.length>0"><img class="item_modal_img" src = "{{current_item.image_url[0] !== undefined ? user_helper.CONSTANT.IMAGE_BASE_URL + current_item.image_url[0] : 'web_images/store_logo.png' }}" alt="item1"></div>
+	<div class="modal-header">
+
+		<h5 class="modal-title" id="modal-basic-title">{{current_item.name}}</h5>
+	</div>
+	<div class="modal-body">
+
+		<p>{{current_item.details}}</p>
+
+		<form>
+			<div class="pop_form" *ngFor="let specification_group of current_item.specifications; let specification_group_index = index;" [class.add_ing]="specification_group.type==1">
+				<div class="customize row clr">
+					<div class="col_8">
+						<h5 style="display: inline;">{{specification_group.name}}</h5>
+						<span *ngIf="specification_group.type==1">(choose 1)</span>
+		        		<span *ngIf="specification_group.type==2">
+		                    <span *ngIf="specification_group.range > 0">
+		                      <span *ngIf="specification_group.max_range > 0">
+		                        (choose {{specification_group.range}} to {{specification_group.max_range}})
+		                      </span>
+		                      <span *ngIf="specification_group.max_range == 0 || specification_group.max_range == null ">
+		                        (choose {{specification_group.range}})
+		                      </span>
+		                    </span>
+		                    <span *ngIf="specification_group.range == 0 || specification_group.range == null">
+		                        <span *ngIf="specification_group.max_range > 0">
+		                            (choose upto {{specification_group.max_range}})
+		                        </span>
+		                    </span>
+		                </span>
+					</div>
+					<div class="col_4">
+						{{title.required}}
+					</div>
+				</div>
+				<div *ngFor="let specification of specification_group.list; let specification_index = index;" class="form_group checkbox_div row clr">
+					<div class="col_8">
+						<label class="check_lb">{{specification.name}}
+							<input  *ngIf="specification_group.type==1" (change)="changeradio($event, specification_group_index, specification_index)" type="radio" [checked]="specification.is_default_selected"> 
+							<span *ngIf="specification_group.type==1" class="checkmark new" ></span>
+
+							<input *ngIf="specification_group.type==2 && (specification_group.max_range == 0 || specification_group.max_range == null)" (change)="changecheckbox($event, specification_group_index, specification_index)" type="checkbox" [checked]="specification.is_default_selected" [disabled]="specification_group.default_selected_count == specification_group.range && specification_group.range !== 0 && !specification.is_default_selected"> 
+							<span *ngIf="specification_group.type==2 && specification_group.max_range == 0 || specification_group.max_range == null" class="checkmark new" ></span>
+
+							<input *ngIf="specification_group.type==2 && specification_group.max_range != 0 && specification_group.max_range != null" (change)="changecheckbox($event, specification_group_index, specification_index)" [disabled]="specification_group.default_selected_count == specification_group.max_range && !specification.is_default_selected" type="checkbox" [checked]="specification.is_default_selected" > 
+							<span *ngIf="specification_group.type==2 && specification_group.max_range != 0 && specification_group.max_range != null" class="checkmark new"></span>
+						</label>
+					</div>
+					<div class="col_4">{{delivery_currency}}{{specification.price}}</div>
+				</div>
+			</div>
+			<div class="notes">
+				<h5>{{title.add_notes}}</h5>
+				<div class="form_group">
+					<textarea placeholder="{{placeholder.write_something}}" name="note_for_item" [(ngModel)]="note_for_item"></textarea>
+				</div>
+			</div>
+			<div class="sub_btn"><button class="btn" (click)="updateCart()" [disabled]="required_count !== required_temp_count"><strong>+</strong>{{button.add_to_cart}} <span>{{delivery_currency}}{{user_pay_payment}}</span></button></div>
+		</form>
+
+	</div>
+</ng-template>
+
+
+<ng-template #open_payment_method_modal let-c="close" let-d="dismiss">
+
+	<button type="button" class="close close_payment_modal" aria-label="Close" (click)="d('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+
+	<div class="text-center pay"><span>{{title.how_would_like_pay | translate}} {{order_payment.user_pay_payment}}</span></div>
+	<div class="clr balance" style="margin-bottom: 0;">
+		<h6>{{title.wallet}} <!-- <a *ngIf="!show_add_wallet" class="add_link" (click)="add_wallet_modal()">{{links.add}}</a> --></h6>
+		
+
+      <div class="col_8">
+        <span style="font-size: 15px;">{{title.current_balance | translate}}</span><br>
+        <span>{{wallet.toFixed(2)}} {{wallet_currency_code}}</span>
+        
+      </div>
+      <div class="col_4">
+        <ui-switch class="pull-right" color="#272727" size="small" (change)="change_user_wallet_status($event)" name="is_use_wallet" [(ngModel)]="is_use_wallet"></ui-switch>
+      </div>
+    </div>
+
+	<div class="pay_title">
+		<span class="btn payment_btn" style="margin-right: 10px;" *ngIf="is_cash_payment_mode" [class.text_black]="selected_payment_gateway=='cash'" (click)="selected_payment_gateway='cash'">{{title.cash | translate}}</span>
+		<span *ngFor="let payment of payment_gateway">
+			<span class="btn payment_btn" style="margin-right: 10px;" *ngIf="payment._id == '586f7db95847c8704f537bd5'" [class.text_black]="selected_payment_gateway=='586f7db95847c8704f537bd5'" (click)="selected_payment_gateway='586f7db95847c8704f537bd5'">{{title.card | translate}}</span>
+		</span>
+	</div>	
+
+	<div class="form_group cash_text" *ngIf="selected_payment_gateway=='cash'">
+		<span *ngIf="is_use_wallet">{{title.you_should | translate}} {{user_helper.router_id.user.currency}}
+			<span *ngIf="wallet<=order_payment.user_pay_payment">{{(order_payment.user_pay_payment - wallet).toFixed(2)}}</span>
+			<span *ngIf="wallet>order_payment.user_pay_payment">0</span>
+			 {{title.cash_delivery_arrived_your_doorstep | translate}}</span>
+		<span *ngIf="!is_use_wallet">{{title.you_should | translate}} {{user_helper.router_id.user.currency}}{{(order_payment.user_pay_payment)}} {{title.cash_delivery_arrived_your_doorstep | translate}}</span>
+	</div>
+
+	<div class="form_group" style="margin-top: 15px" *ngIf="selected_payment_gateway=='586f7db95847c8704f537bd5'">
+		<!-- <div *ngFor="let card of card_list; let card_index=index;" (click)="select_card(card._id , card_index)" class="form_group">
+			<input type="text" disabled value="XXXX XXXX XXXX {{card.last_four}} {{card.card_type}}" />
+			<button *ngIf="card.is_default"><img src="../assets/images/checked.png" alt="" /></button>
+		</div> -->
+		<div class="pro_dt" style="margin-bottom: 20px;">
+			<h6>{{title.credit_cards | translate}}</h6>
+
+	        <div class="form_group" *ngFor="let card of card_list; let card_index=index;">
+	          <input type="text" readonly value="XXXX XXXX XXXX {{card.last_four}} {{card.card_type}}" name="" (click)="select_card(card._id , card_index)">
+	          <button style="margin-right: 50px; margin-top: 5px;" *ngIf="card.is_default" class="chkbtn"><img src="../assets/images/checked.png" class="rightsign" alt="" /></button>
+	        </div>
+	        <span class="text-center" *ngIf="card_list.length==0">
+	        	{{title.please_add_card_first | translate}}
+	        </span>
+	    </div>
+        
+	</div>	
+
+	<div *ngIf="wallet>0 && is_use_wallet" class="validation_error text-center" style="margin: 20px 0px;font-size: 15px;">
+		<span>{{title.you_are_paying | translate}} {{user_helper.router_id.user.currency}}
+			<span *ngIf="wallet<=order_payment.user_pay_payment">{{wallet}}</span>
+			<span *ngIf="wallet>order_payment.user_pay_payment">{{order_payment.user_pay_payment}}</span>
+			{{title.amount_from_wallet_balance | translate}}</span>
+	</div>
+	
+    <div class="text-center">
+    	<span class="btn blue_btn" *ngIf="is_use_wallet" (click)="create_order()">{{button.pay | translate}} {{user_helper.router_id.user.currency}}
+    		<span *ngIf="wallet<=order_payment.user_pay_payment">{{(order_payment.user_pay_payment - wallet).toFixed(2)}}</span>
+    		<span *ngIf="wallet>order_payment.user_pay_payment">0</span>
+    	</span>
+    	<span class="btn blue_btn" *ngIf="!is_use_wallet" (click)="create_order()">{{button.pay | translate}} {{user_helper.router_id.user.currency}}{{(order_payment.user_pay_payment)}}</span>
+    </div>
+
+</ng-template>

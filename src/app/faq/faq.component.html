@@ -1,0 +1,23 @@
+<section class="inner_con mart100">		
+	<div class="container">
+		<div class="faq">	
+			<h1>{{title.help_t}}</h1>
+			<p>{{description.faq_des}} <span>{{description.faq_span}}</span>, {{description.faq_des2}} <span>{{description.faq_span2}}</span>, {{description.faq_des3}}</p>
+			<div class="row clr">
+				<div class="col_6">
+					<div class="faq_dt" *ngFor = "let faqlist of faqList">
+						<h6>{{faqlist.que}}</h6>
+						<p>{{faqlist.ans}}</p>
+					</div>
+				</div>
+				<div class="col_6">
+					<div class="faq_dt" *ngFor = "let faqlist of faqList2">
+						<h6>{{faqlist.que}}</h6>
+						<p>{{faqlist.ans}}</p>
+					</div>
+					
+				</div>
+			</div>
+		</div>
+	</div>	
+</section>

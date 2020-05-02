@@ -1,0 +1,46 @@
+
+  <div class="pro_title" *ngIf="!is_add">
+    <h6>{{title.addresses | translate}}</h6>
+    <a class="edit" *ngIf="!is_edit" (click)="is_edit=true">{{links.edit | translate}}</a>
+    <a class="edit" *ngIf="is_edit" (click)="is_edit=false"><img src="../assets/images/cross.png" /></a>
+  </div>
+  <div class="pro_dt" *ngIf="!is_add" >
+    <form *ngFor="let address of favourite_addresses; let index=index;" >
+      <div class="form_group">
+        <label>{{address.address_name}}</label>
+        <input type="text" placeholder="{{address.address}}" name="" readonly>
+        <div *ngIf="is_edit" class="checkbox_div"><label class="check_lb"><input type="checkbox" [checked]="address_ids.indexOf(address._id) !== -1" (change)="check_address(address._id)"><span class="checkmark"></span></label></div>
+      </div>
+    </form>
+    <button class="add_btn blue_btn btn" *ngIf="!is_edit" (click)="is_add=true;">{{button.add_an_adress | translate}}</button>
+    <div (click)="delete_address()" *ngIf="is_edit && address_ids.length>0" class="del_sec"><a>{{links.delete_section | translate}}</a></div>
+  </div>
+
+  <div class="pro_title"  [hidden]="!is_add">
+    <h6>{{title.addresses | translate}}</h6>
+    <img src="../assets/images/cross.png" (click)="is_add=false;" class="cross_img"  style="display: block;" />
+  </div>
+  <div class="pro_dt edit_data" [hidden]="!is_add">
+    <form #addAddressForm="ngForm" (ngSubmit)="add_address_data(addAddressForm.value)">
+      <input type="hidden" name="latitude" [(ngModel)]="add_address.latitude" #latitude="ngModel" >
+      <input type="hidden" name="longitude" [(ngModel)]="add_address.longitude" #longitude="ngModel" >
+      <input type="hidden" name="country" [(ngModel)]="add_address.country" #country="ngModel" >
+      <input type="hidden" name="country_code" [(ngModel)]="add_address.country_code" #country_code="ngModel" >
+
+      <div class="form_group">
+        <input type="text" name="address_name" placeholder="{{title.address_name | translate}}" [(ngModel)]="add_address.address_name" #address_name="ngModel" required>
+      </div>
+      <div class="form_group">
+        <input type="text" name="address" id="fav_address" placeholder="{{title.address | translate}}" [(ngModel)]="add_address.address" #address="ngModel" required>
+      </div>
+      <div class="form_group row clr">
+        <div class="col_6"><input type="text" name="floor" placeholder="{{title.floor | translate}}" [(ngModel)]="add_address.floor" #floor="ngModel" required></div>
+        <div class="col_6"><input type="text" name="entry_code" placeholder="{{title.entry_code | translate}}" [(ngModel)]="add_address.entry_code" #entry_code="ngModel" required></div>
+      </div>
+      <div class="form_group">
+        <input type="text" name="comment" placeholder="{{title.comment | translate}}" [(ngModel)]="add_address.comment" #comment="ngModel" required>
+      </div>
+
+      <button type="submit" class="add_btn blue_btn btn save_b">{{button.save_b | translate}}</button>
+    </form>
+  </div>

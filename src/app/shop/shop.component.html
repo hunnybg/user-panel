@@ -1,0 +1,281 @@
+<style type="text/css" media="screen">
+	label {
+	   margin-left: 10px;
+	}
+
+
+</style>
+<div style="background: #fafafa;">
+	<section *ngIf="current_store.image_url" class="shop_banner" [ngStyle]="{'background-image': 'url(' + user_helper.CONSTANT.IMAGE_BASE_URL + current_store.image_url + ')'}">
+		<div class="container">
+			<div class="banner_text">
+				<span class="shop_name">{{current_store.name}} <img src = "../assets/images/favourites.svg" style="width: 20px;" (click)="add_favourite_store()"	 alt="like" *ngIf="user_id != '' && !current_store.favourite" />
+				<img src="../assets/images/favourites-hover.svg" style="width: 20px;" (click)="remove_favourite_store()" *ngIf="user_id != '' && current_store.favourite" /></span>
+				<div class="shop_text">{{current_store.delivery_time}} {{title.min | translate}} - {{current_store.delivery_time_max}} {{title.min | translate}}</div>
+
+				<div class="shop_tag"><span *ngFor="let i of current_store.famous_products_tags; let last=last;">{{i}}<span *ngIf="!last"> - </span></span></div>
+			</div>
+			<div>
+			</div>
+		</div>
+	</section>
+	<section *ngIf="!current_store.image_url" class="shop_banner" [ngStyle]="{'background-image': 'url(web_images/store_logo.png)'}">
+		<div class="container">
+			<div class="banner_text">
+				<span class="shop_name">{{current_store.name}} <img src = "../assets/images/favourites.svg" style="width: 20px;" (click)="add_favourite_store()"	 alt="like" *ngIf="user_id != '' && !current_store.favourite" />
+				<img src="../assets/images/favourites-hover.svg" style="width: 20px;" (click)="remove_favourite_store()" *ngIf="user_id != '' && current_store.favourite" /></span>
+				<div class="shop_text">{{current_store.delivery_time}} {{title.min | translate}} - {{current_store.delivery_time_max}} {{title.min | translate}}</div>
+
+				<div class="shop_tag"><span *ngFor="let i of current_store.famous_products_tags; let last=last;">{{i}}<span *ngIf="!last"> - </span></span></div>
+			</div>
+			<div>
+			</div>
+		</div>
+	</section>
+	<section class="inner_con padt30">
+		
+		<div id="fix_bar">	
+			<div class="container item_div">	
+				<div class="tab3">
+					<div class="clr box">
+						<ul>
+							<li *ngFor="let product of filtered_product_item_list; let product_index=index;">
+								<a (click)="redirect(product_index)">{{product._id.name}}</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container item_div">	
+			
+			<div class="tab3">
+				
+				<div class="box row clr">
+					<div class="col_8">
+						<div class="tab_con active" *ngFor="let product of filtered_product_item_list; let product_index=index;" id="tab{{product_index}}">
+							<h5>{{product._id.name}}</h5>
+							<div class="row remove_row_margin">
+								<div class="col_6" *ngFor="let item of product.items; let item_index=index;" (click)="open_item_modal(item, item_index, product_index, $event, content)">
+									<div class="shop_dt">
+										<a class="popup-with-form">
+											<div class="shop_img" *ngIf="item.image_url.length>0"><img src = "{{item.image_url[0] !== undefined ? user_helper.CONSTANT.IMAGE_BASE_URL + item.image_url[0] : '' }}" class="item_img" alt="product" /></div>
+											<div class="overflow_div">
+												<h6>{{item.name}}</h6>
+												<div class="line-clamp"><p style="height: 45px; overflow: hidden;">{{item.details}}</p></div>
+												<div class="price">{{delivery_currency}}{{(item.total_item_price).toFixed(2)}}</div>
+											</div>
+										</a>
+										<ng-template #content let-c="close" let-d="dismiss">
+										  <button type="button" id="close_item_model" class="close" aria-label="Close" (click)="d('Cross click')">
+										      <span aria-hidden="true">&times;</span>
+										  </button>
+										  <div class="big_img" *ngIf="current_item.image_url.length>0"><img class="item_modal_img" src = "{{current_item.image_url[0] !== undefined ? user_helper.CONSTANT.IMAGE_BASE_URL + current_item.image_url[0] : 'web_images/store_logo.png' }}" alt="item1"></div>
+										  <div class="modal-header">
+										  	
+										    <h5 class="modal-title" id="modal-basic-title">{{current_item.name}}</h5>
+										  </div>
+										  <div class="modal-body">					  	 
+												
+											<p>{{current_item.details}}</p>
+
+											<form>
+												<div class="pop_form" *ngFor="let specification_group of current_item.specifications; let specification_group_index = index;" [class.add_ing]="specification_group.type==1">
+													<div class="customize row clr">
+														<div class="col_8">
+															<h5>{{specification_group.name}}</h5>
+															<span *ngIf="specification_group.type==1" style="font-size:16px;margin-left: 10px;">choose 1</span>
+						                            		<span *ngIf="specification_group.type==2" style="font-size:16px;margin-left: 10px;">
+						                                        <span *ngIf="specification_group.range > 0">
+						                                          <span *ngIf="specification_group.max_range > 0">
+						                                            (choose {{specification_group.range}} to {{specification_group.max_range}})
+						                                          </span>
+						                                          <span *ngIf="specification_group.max_range == 0 || specification_group.max_range == null ">
+						                                            (choose {{specification_group.range}})
+						                                          </span>
+						                                        </span>
+						                                        <span *ngIf="specification_group.range == 0 || specification_group.range == null">
+						                                            <span *ngIf="specification_group.max_range > 0">
+						                                                (choose upto {{specification_group.max_range}})
+						                                            </span>
+						                                        </span>
+						                                    </span>
+														</div>
+														<div class="col_4" *ngIf="specification_group.is_required">
+															{{title.required}}
+														</div>
+													</div>
+													<div *ngFor="let specification of specification_group.list; let specification_index = index;" class="form_group checkbox_div row clr">
+														<div class="col_8">
+															<label class="check_lb">{{specification.name}}
+																<input  *ngIf="specification_group.type==1" (change)="changeradio($event, specification_group_index, specification_index)" class="radiobutton" type="radio" [checked]="specification.is_default_selected"> <span *ngIf="specification_group.type==1" class="checkmark"></span>
+
+																<input *ngIf="specification_group.type==2 && (specification_group.max_range == 0 || specification_group.max_range == null)" [disabled]="specification_group.default_selected_count == specification_group.range && specification_group.range !== 0 && !specification.is_default_selected" (change)="changecheckbox($event, specification_group_index, specification_index)" type="checkbox" [checked]="specification.is_default_selected" > <span *ngIf="specification_group.type==2 && specification_group.max_range == 0 || specification_group.max_range == null" class="checkmark"></span>
+
+																<input *ngIf="specification_group.type==2 && specification_group.max_range != 0 && specification_group.max_range != null" [disabled]="specification_group.default_selected_count == specification_group.max_range && !specification.is_default_selected" (change)="changecheckbox($event, specification_group_index, specification_index)" type="checkbox" [checked]="specification.is_default_selected" > <span *ngIf="specification_group.type==2 && specification_group.max_range != 0 && specification_group.max_range != null" class="checkmark"></span>
+
+															</label>
+														</div>
+														<div class="col_4"><span *ngIf="specification.price">{{delivery_currency}}{{specification.price}}</span></div>
+													</div>
+												</div>
+												<div class="notes">
+													<h5>{{title.add_notes}}</h5>
+													<div class="form_group">
+														<textarea placeholder="{{placeholder.write_something}}" name="note_for_item" [(ngModel)]="note_for_item"></textarea>
+													</div>
+												</div>
+												<div class="quantity">
+													<!-- <h5>{{title.quantity}}</h5> -->
+													<div class="value"><button class="minus" (click)="decrease_qty()"><img src = "../assets/images/minus_c.png" alt=""  /></button>  <span>{{qty}}</span> <button class="plus" (click)="incerase_qty()"> <img src = "../assets/images/plus_c.png" alt=""  /> </button>
+													</div>
+												</div>
+												<div class="sub_btn"><button class="btn" (click)="handleClickOnAddToCart()" [disabled]="required_count !== required_temp_count"><strong>+</strong>{{button.add_to_cart}} <span>{{delivery_currency}}{{total}}</span></button></div>
+											</form>
+										
+										  </div>
+										</ng-template>
+									</div>
+								</div>
+							</div>
+						</div>
+
+					</div>			
+					<div class="col_4" id="fix_bar1">
+						<div class="shop_ord_dt">
+							<h5>{{title.your_basket | translate}}</h5>
+							<div style="overflow: auto;height: calc(100vh - 350px);" *ngIf="user_helper.user_cart.cart_data.total_item>0">
+								<div *ngFor="let cart_product of user_helper.user_cart.cart_data.cart; let product_index=index;">
+									<div class="ord_in" *ngFor="let cart_item of cart_product.items; let item_index=index;">
+										<div class="ord_top clr" >
+											<div class="col_8" (click)="open_edit_item_modal(content2, cart_item, cart_product, item_index, product_index)">
+												<h6>{{cart_item.item_name}}</h6>
+											</div>
+											<div class="col_4 fr">
+												<div class="p_price">
+													{{user_helper.router_id.user.currency}}{{cart_item.total_item_and_specification_price}}
+												</div>
+												
+											</div>
+										</div>
+										<!--<div class="ord_mid">-->
+											<!--<p [innerHTML] = "ordlist.ord_des"></p>-->
+										<!--</div>-->
+										<div class="ord_btm clr">
+											<div class="col_8">
+												<!-- <a (click)="open_edit_item_modal(content2, cart_item, cart_product, item_index, product_index)">{{button.modify | translate}}</a> -->
+												<a (click)="user_helper.remove_from_cart(product_index, item_index)" class="remove">{{button.remove | translate}}</a>
+											</div>
+											<div class="col_4 fr">
+												<div class="value"><button class="minus" (click)="user_helper.decrease_qty(product_index, item_index)"> <img src="../assets/images/minus_c.png" alt="" /> </button> <span>{{cart_item.quantity}}</span> <button class="plus" (click)="user_helper.increase_qty(product_index, item_index)"> <img src="../assets/images/plus_c.png" alt="" /> </button></div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="ord_total ord_total_dt clr">							
+									<div class="col_6">								
+										{{title.total | translate}}
+									</div>							
+									<div class="col_6 fr">
+										{{user_helper.router_id.user.currency}}{{user_helper.user_cart.total_cart_amount}}
+									</div>							
+								</div>
+								<div class="sub_btn" (click)="user_helper.basket()"><button class="btn">{{button.order | translate}} !</button></div>
+							</div>
+							<div *ngIf="user_helper.user_cart.cart_data.total_item==0">
+								<span>{{title.no_article_selected | translate}}</span>
+								<div class="sub_btn"><button class="btn" disabled>{{button.order | translate}} !</button></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>	
+	</section>
+</div>
+
+<ng-template #content2 let-c="close" let-d="dismiss">
+	<button type="button" id="close_item_model1" class="close" aria-label="Close" (click)="d('Cross click')">
+		<span aria-hidden="true">&times;</span>
+	</button>
+	<div class="big_img" *ngIf="current_item.image_url.length>0"><img class="item_modal_img" src = "{{current_item.image_url[0] !== undefined ? user_helper.CONSTANT.IMAGE_BASE_URL + current_item.image_url[0] : 'web_images/store_logo.png' }}" alt="item1"></div>
+	<div class="modal-header">
+
+		<h5 class="modal-title" id="modal-basic-title">{{current_item.name}}</h5>
+	</div>
+	<div class="modal-body">
+
+		<p>{{current_item.details}}</p>
+
+		<form>
+			<div class="pop_form" *ngFor="let specification_group of current_item.specifications; let specification_group_index = index;" [class.add_ing]="specification_group.type==1">
+				<div class="customize row clr">
+					<div class="col_8">
+						<h5 style="display: inline;">{{specification_group.name}}</h5>
+						<span *ngIf="specification_group.type==1"> (choose 1)</span>
+                        <span *ngIf="specification_group.type==2">
+                            <span *ngIf="specification_group.range > 0">
+                              <span *ngIf="specification_group.max_range > 0">
+                                 (choose {{specification_group.range}} to {{specification_group.max_range}})
+                              </span>
+                              <span *ngIf="specification_group.max_range == 0 || specification_group.max_range == null ">
+                                 (choose {{specification_group.range}})
+                              </span>
+                            </span>
+                            <span *ngIf="specification_group.range == 0 || specification_group.range == null">
+                                <span *ngIf="specification_group.max_range > 0">
+                                     (choose upto {{specification_group.max_range}})
+                                </span>
+                            </span>
+                        </span>
+					</div>
+					<div class="col_4">
+						{{title.required}}
+					</div>
+				</div>
+				<div *ngFor="let specification of specification_group.list; let specification_index = index;" class="form_group checkbox_div row clr">
+					<div class="col_8">
+						<label class="check_lb">{{specification.name}}
+							<input  *ngIf="specification_group.type==1" (change)="changeradio($event, specification_group_index, specification_index)" type="radio" class="radiobutton" [checked]="specification.is_default_selected"> 
+							<span *ngIf="specification_group.type==1" class="checkmark"></span>
+
+							<input *ngIf="specification_group.type==2 && (specification_group.max_range == 0 || specification_group.max_range == null)" (change)="changecheckbox($event, specification_group_index, specification_index)" type="checkbox" [disabled]="specification_group.default_selected_count == specification_group.range && specification_group.range !== 0 && !specification.is_default_selected" [checked]="specification.is_default_selected" > 
+							<span *ngIf="specification_group.type==2 && specification_group.max_range == 0 || specification_group.max_range == null" class="checkmark"></span>
+
+							<input *ngIf="specification_group.type==2 && specification_group.max_range != 0 && specification_group.max_range != null" [disabled]="specification_group.default_selected_count == specification_group.max_range && !specification.is_default_selected" type="checkbox" [checked]="specification.is_default_selected" > 
+							<span *ngIf="specification_group.type==2 && specification_group.max_range != 0 && specification_group.max_range != null" class="checkmark"></span>
+						</label>
+					</div>
+					<div class="col_4">{{delivery_currency}}{{specification.price}}</div>
+				</div>
+			</div>
+			<div class="notes">
+				<h5>{{title.add_notes}}</h5>
+				<div class="form_group">
+					<textarea placeholder="{{placeholder.write_something}}" name="note_for_item" [(ngModel)]="note_for_item"></textarea>
+				</div>
+			</div>
+			<div class="sub_btn"><button class="btn" (click)="updateCart()" [disabled]="required_count !== required_temp_count"><strong>+</strong>{{button.add_to_cart}} <span>{{delivery_currency}}{{total}}</span></button></div>
+		</form>
+
+	</div>
+</ng-template>
+
+
+<ng-template #clear_cart_modal let-c="close" let-d="dismiss" class="white-popup-block">
+  	<button type="button" class="close" aria-label="Close" id="clear_cart_modal_close" (click)="d('Cross click')">
+	      <span aria-hidden="true">&times;</span>
+	</button>
+	<div class="modal-header">
+	    <h4 class="modal-title" id="modal-basic-title2">{{title.attention | translate}}</h4>                
+	</div>
+	<div class="modal-body">
+		<div class="text-center">
+			<span>{{title.other_store_item_in_cart | translate}}</span>
+			<div class="sub_btn"><button style="width: 96px;" (click)="clear_old_cart()" type="button" class="btn">{{button.ok | translate}}</button></div>
+		</div>
+	</div>
+
+</ng-template>
+<button id="clear_cart_modal" (click)="open(clear_cart_modal)"></button>

@@ -1,0 +1,198 @@
+<style type="text/css">
+  
+  .pac-item{
+    padding-top: 2px !important;
+      padding-bottom: 2px !important;
+      height: 50px;
+  }
+  
+  .modal-dialog{
+    margin-top: 5px;
+  }
+
+  .pac-item-query+span{
+    display: block;
+      padding-left: 31px !important;
+      margin-top: -16px !important;
+  }
+  .pac-item-query{
+    padding-left: 10px !important;
+  }
+
+  .pac-icon{
+    margin-top: 12px !important;
+    background-image: url(../assets/images/map-grey.svg);
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 15px;
+  }
+
+  .pac-container{
+    padding-left: 10px !important;
+      padding-right: 10px !important;
+      margin-top: 5px;
+      border-radius: 15px;
+      font-family: Quicksand
+  }
+
+  .pac-logo:after{
+    display: none !important;
+  }
+
+  .playpause {
+      background-image:url(../assets/../assets/home_page_images/video-player.svg);
+      background-repeat:no-repeat;
+      width:120px;
+      height:120px;
+      position:absolute;
+      left:0%;
+      right:0%;
+      top:0%;
+      bottom:0%;
+      margin:auto;
+      background-size:contain;
+      background-position: center;
+  }
+
+  .video_div{
+    display:table;
+      position:relative;
+      width:70%;
+  }
+
+  video::-webkit-media-controls-overlay-play-button {
+    display: none;
+  }
+
+</style>
+
+<div id="content" [hidden]="device_type==''" (click)="open(content)" ></div>
+
+<ng-template #content let-c="close" let-d="dismiss" class="white-popup-block" style="background-color:white !important; font-family: Roboto Regular;">
+    <button type="button" class="close" aria-label="Close" id="device_modal" style="" (click)="d('Cross click')">
+        <span aria-hidden="true" style="color:black;">&times;</span>
+    </button>
+    <div class="modal-body" style="background-color:white;">
+      <div style="text-align: center;color:#000000;font-family: Roboto Regular;">
+        <span style="font-size: 38px;font-weight: 600;">TO ORDER</span><br>
+        <span style="font-size: 22px;font-weight: 600;">Download the App!</span>
+      </div>
+      <div style="text-align: center;margin-left: 50px;margin-right: 50px;">
+        <a href="{{app_url}}"><button class="btn signup" style="background-color:black; width: 100%;margin-top:20px; color:white;">DOWNLOAD NOW!</button></a>
+      </div>
+    </div>
+</ng-template>
+
+
+ <!-- section one in order page/? -->
+<div class="order">
+	<div class="container-fluid">
+	  <div class="row">
+	    <div>
+	      <div class="col-md-6">
+	      	<div class="content">
+	      		<p class="p1">Discover The Best</p>
+	      		<p class="p2">DELIVERY SERVICE</p>
+	      		<p class="p3">You choose & we will delivery it at your doorstep.</p>
+	      		<br>
+	      		<div class="input-container">
+	      			<i style="margin: auto;" class="fa fa-map-marker"></i>
+	      			<input type="text" style="border: 0;"  id="address1" [(ngModel)]="current_location.address" #address="ngModel" name="address" placeholder="{{placeholder.enter_an_address | translate}}..." class="form-control"/>
+	      		</div>
+	      	</div>
+	      </div>
+	      <div class="col-md-6 im"> 
+	      	<img src="assets/img/bg_img.png" class="img-responsive" width="100%" height="100%">
+	      </div>
+	    </div>
+	  </div>
+	</div>
+</div>
+
+<!-- section second in order page  -->
+<div class="second" id="d_services">
+	<div class="container-fluid ">
+		<div class="row">
+			<div class="col-md-12">
+			<!-- slider one  -->
+				<div class="col-md-6">
+					<ngb-carousel class="no-icon" >
+						<ng-template ngbSlide *ngFor="let ad of ads;">
+							<img (click)="redirect_to_store(ad.is_ads_redirect_to_store && ad.store_id)" src="{{ad.image_url}}" class="img-fluid" alt="Random  slide" height="auto" width="100%">
+						</ng-template>
+
+						<ng-template ngbSlide *ngIf="ads.length==0">
+							<img src="../assets/home_page_images/img_a.png"  class="img-fluid" alt="Random  slide" height="auto" width="100%" style="margin-top:100px;">
+						</ng-template>
+					</ngb-carousel>
+				</div>
+				<div class="col-md-6" *ngIf="deliveries_in_city.length==0;">
+					<ngb-carousel class="no-icon" >
+						<ng-template ngbSlide>
+							<img src="images/location_area_unavaliable.png"  class="img-fluid" alt="Random  slide" height="auto" width="100%">
+						</ng-template>
+					</ngb-carousel>
+				</div>
+				<!-- slider second -->
+				<div class="col-md-6 dd" *ngIf="deliveries_in_city.length>0;">
+					<div class="text-center hinttext">
+						<h3>Explore the Deliveries</h3>
+						<h4>Choose any delivery from below</h4>
+					</div>
+					<ngb-carousel class="sildee idocators icon">
+					    <!-- <ng-template ngbSlide *ngFor="let number of total_delivery_slider; let index=index;">
+						 <div class="row">
+							<div class="col-sm-4" *ngFor="let delivery of deliveries_in_city; let index=index;" (click)="clickon_category(delivery._id)">
+							  <div class="line d-block mx-auto" [class.line1]="selected_delivery_id==delivery._id">
+							  	<a><img  src="{{delivery.icon_url}}" class="img-fluid mx-auto d-block img-circle active" selected></a>
+							  </div>
+							  <h6>{{delivery.delivery_name}}</h6>
+						    </div>
+						   <div class="col-sm-4" >
+							  <div class="line d-block mx-auto" >
+							  	<a><img  src="assets/img/delvry.jpg" class="img-fluid mx-auto d-block img-circle active" selected></a>
+							  </div>
+							  <h6>test</h6>
+						    </div> -->
+						 <!-- </div>
+						</ng-template> -->
+						 <ng-template ngbSlide *ngFor="let number of total_delivery_slider; let d_index=index;">
+						 <div class="row">
+							<div class="col-sm-4" *ngFor="let delivery of deliveries_in_city; let index=index;" (click)="clickon_category(delivery._id)">
+							  <div *ngIf="(index>= (d_index)*6) && (index<(d_index+1)*6)" class="line d-block mx-auto" [class.line1]="selected_delivery_id==delivery._id">
+							  	<a><img  src="{{delivery.icon_url != '' ? user_helper.CONSTANT.IMAGE_BASE_URL + delivery.icon_url : 'web_images/logo.png'}}" class="img-fluid mx-auto d-block img-circle active" selected></a>
+							  </div>
+							  <h6 *ngIf="(index>= (d_index)*6) && (index<(d_index+1)*6)" >{{delivery.delivery_name}}</h6>
+						    </div>
+						    
+						 </div>
+						</ng-template>
+					</ngb-carousel>
+					<div class="store">
+						<button type="button" class="btn btn-dark mx-auto d-block" (click)="get_store_list(selected_delivery_id)">GO TO STORE</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<!-- section third in order page -->
+<div class="third_part">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="adimg">
+					<img src="assets/img/download_img.png" class="img-fluid img1"  >
+				</div>
+				<div class="adapp">
+					<img src="web_images/user_logo.png" class="img-fluid">
+					<h2><strong>Vaiter</strong></h2>
+					<p class="text-justify">Vaiter simply refers as electronic delivery which provides the best services to the customers who sign up for Vaiter. Vaiter can be subdivided into various parts such as food delivery, grocery delivery, alcohol delivery and much more.</p>
+					<p><strong>Download The App Now</strong></p>
+					<a target="_blank" href="https://itunes.apple.com/us/app/id1477016153?ls=1&mt=8"><button ngbButton type="button" class="btn ">APP STORE</button></a>
+					<a target="_blank" href="https://play.google.com/store/apps/details?id=com.vaiter.user&hl=en"><button ngbButton type="button" class="btn plays">PLAY STORE</button></a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

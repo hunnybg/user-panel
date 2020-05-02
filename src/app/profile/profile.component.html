@@ -1,0 +1,69 @@
+<form #userProfileForm="ngForm" (ngSubmit)="user_update(userProfileForm.value)">
+	<div class="pro_title">
+		<h6>{{title.profile_t | translate}}</h6>
+		<a class="edit" (click)="edit=true">{{links.edit | translate}}</a>
+		<a class="save"><button [disabled]="userProfileForm.invalid" type="submit">{{links.save | translate}}</button></a>
+	</div>
+	<div class="pro_dt">
+		<div class="form_group">
+			<input type="text" [disabled]="!edit" name="first_name" placeholder="{{placeholder.first_name || translate}}" [(ngModel)]="user_profile.first_name" #first_name="ngModel" required>
+			<div *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)" class="validation_error">
+                  <div *ngIf = "first_name.errors.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+		</div>
+		<div class="form_group">
+			<input type="text" [disabled]="!edit" name="last_name" placeholder="{{placeholder.last_name || translate}}" [(ngModel)]="user_profile.last_name" #last_name="ngModel" required>
+			<div *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)" class="validation_error">
+                  <div *ngIf = "last_name.errors.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+              </div>
+		</div>
+		<div class="form_group">
+			<input type="email" [disabled]="!edit" name="email" placeholder="{{placeholder.email || translate}}" [(ngModel)]="user_profile.email" #email="ngModel" required>
+			<div *ngIf="email.invalid && (email.dirty || email.touched)" class="validation_error">
+                  <div *ngIf = "email.errors?.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+                  <div *ngIf = "email.errors?.pattern && email.touched">
+                      {{title.please_enter_valid_email | translate}}
+                  </div>
+              </div>
+		</div>
+		<div class="form_group">
+			<input type="password" minlength="6" [disabled]="!edit" name="old_password" placeholder="{{placeholder.password || translate}}" [(ngModel)]="user_profile.old_password" #old_password="ngModel" required>
+			<div *ngIf="old_password.invalid && (old_password.dirty || old_password.touched)" class="validation_error">
+				<div *ngIf = "old_password.errors?.required">
+                      {{title.this_field_is_required | translate}}
+                  </div>
+                <div *ngIf = "old_password.errors?.minlength && old_password.touched">
+                    {{title.password_doesnt_seem_right | translate}}
+                </div>
+            </div>
+		</div>
+		<div class="form_group">
+			<input type="password" minlength="6" [disabled]="!edit" name="new_password" placeholder="{{placeholder.new_password || translate}}" [(ngModel)]="user_profile.new_password" #new_password="ngModel">
+			<div *ngIf="new_password.invalid && (new_password.dirty || new_password.touched)" class="validation_error">
+                <div *ngIf = "new_password.errors?.minlength && new_password.touched">
+                    {{title.password_doesnt_seem_right | translate}}
+                </div>
+            </div>
+			<!-- <a class="change">Change</a> -->
+		</div>
+		<div class="form_group tel">
+			<input type="text" minlength="9" maxlength="12" [disabled]="!edit" name="phone" [(ngModel)]="user_profile.phone" placeholder="{{placeholder.phone || translate}}" (keypress)="user_helper.number_validation($event)" #phone="ngModel" required>
+			<span style="position: absolute;left: 0px;font-weight: 500;">{{user_profile.country_phone_code}}</span>
+			<div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="validation_error">
+				<div *ngIf = "phone.errors?.required">
+	              {{title.this_field_is_required | translate}}
+	          	</div>
+	          	<div *ngIf = "phone.errors?.minlength && phone.touched">
+                    {{title.phone_doesnt_seem_right | translate}}
+                </div>
+	        </div>
+			<!-- <img src="../assets/images/flag.svg" /> -->
+		</div>
+	</div>
+</form>

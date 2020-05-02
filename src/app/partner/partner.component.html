@@ -1,0 +1,178 @@
+
+  <section class="l_section1">
+    <owl-carousel #owlElement
+          [options]="{items: 1, dots: true, navigation: true, nav: false, navClass: ['owl-theme', 'owl-dots', 'owl-dot', 'owl-prev', 'owl-next' ], responsive: {'0': {  items: 1, margin: 0 },
+                  '480': { items: 1,  margin: 0 },
+    '600': { items: 1, margin: 0}
+             } }"
+          [items]="['../assets/images/partner.png', '../assets/images/partner.png', '../assets/images/partner.png']">
+      <div class="item" *ngFor = "let slide_con of slide_conList">
+        <div class="sliderimg">
+          <img [src] = slide_con.bag_img />
+        </div>
+        <div class="container">
+          <div class="col_6">
+            <div class="slider_text" >            
+              <h1>{{slide_con.title | translate}}</h1>
+              <p>{{slide_con.slide_dis | translate}}</p>
+              
+                <button (click)="redirect()" class="btn" style="font-weight: 700;">{{slide_con.dwnl_btn | translate}}</button>
+              
+            </div>
+          </div>
+        </div>
+      </div>
+      
+    </owl-carousel>
+  </section>
+  <!-- <section class="video" *ngIf="!show_future">
+    <img src = "../assets/images/video.jpg" alt="video" />
+  </section> -->
+  <section class="l_section2" *ngIf="!show_future">
+    <div class="container">
+      <div class="row clr">
+        <div class="col_6">
+          <img src = "../assets/images/par_l.jpg" alt="" />
+        </div>
+        <div class="col_6 list_info"> 
+          <h2>{{title.avantages | translate}}</h2>
+          <ul>
+            <li *ngFor = "let partnerlist of partnerList"><a style="cursor: unset;">{{partnerlist.data}}</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="l_section3" *ngIf="!show_future"> 
+    <div class="service_img"><img src = "../assets/images/screen-backend.png" /></div>
+    <div class="l_section3_in">
+      <div class="right_dt fr">
+        <img src = "../assets/images/app_pat.png" alt="app_pat" class="app_icon" />
+        <h2>{{title.hop_a_votre_service | translate}}</h2>
+        <p [innerHTML] = "description.service_dis"></p>
+        <div class="service">
+          <a style="cursor: unset;">{{service.performance}}</a>
+          <a style="cursor: unset;" >{{service.dynamisme}}</a>
+          <a style="cursor: unset;" >{{service.flexibilite}}</a>
+        </div>
+      </div>
+      <div class="clr"></div>
+    </div>
+  </section>
+  <section class="l_section4" id="l_section4_in" *ngIf="!show_future">
+    <div class="l_section4_in">
+      <div class="container">
+        <div class="row clr">
+          <div class="col_6">
+            <div class="contact_form">
+              <form #f="ngForm" (ngSubmit)= "onSubmit(f.value)">
+                <div class="form_group">
+                  <input type="text"  placeholder="{{placeholder.geneva_switzerland | translate}}" name = "address" [(ngModel)] = "addresss" required />
+                  <!--<button><img src = "../assets/images/send.png" alt="send" /></button>-->
+                  <!--<div *ngIf="address.invalid && (address.dirty || address.touched)" class="validation_error">-->
+                            <!--<div *ngIf = "address.errors?.required">-->
+                                <!--Address field can't be blank-->
+                            <!--</div>-->
+                            <!--<div *ngIf = "address.errors?.minlength && address.touched"> -->
+                                <!--The Address doesn't seem right-->
+                            <!--</div>-->
+                        <!--</div>-->
+                </div>
+                <div class="form_group">
+                  <div class="select_div">
+                    <select name="delivery_type" [(ngModel)]="delivery_type">
+                      <option *ngFor="let delivery of deliveries;" value="{{delivery.delivery_name}}">{{delivery.delivery_name}}</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form_group">
+                  <input type="text" placeholder="{{placeholder.company_name | translate}}"  name = "companyName" [(ngModel)] = "companyName" required />
+                  <!--<div *ngIf="companyName.invalid && (companyName.dirty || companyName.touched)" class="validation_error">-->
+                            <!--<div *ngIf = "companyName.errors?.required">-->
+                                <!--Company Name field can't be blank-->
+                            <!--</div>-->
+                            <!--<div *ngIf = "companyName.errors?.pattern && companyName.touched">-->
+                                <!--The first Company Name doesn't seem right-->
+                            <!--</div>-->
+                        <!--</div>-->
+                </div>
+                <div class="form_group">
+                  <input type="text" name="postal_code" [(ngModel)]="postal_code" placeholder="{{placeholder.postal_code  | translate}}" />
+                </div>
+                <div class="form_group">
+                  <div class="row clr">
+                    <div class="col_6">
+                      <input type="text" placeholder="{{placeholder.first_name | translate}}" name = "name" [(ngModel)] = "name" required  />
+                      
+                      <!--<div *ngIf="name.invalid && (name.dirty || name.touched)" class="validation_error">-->
+                                <!--<div *ngIf = "name.errors?.required">-->
+                                    <!--Name field can't be blank-->
+                                <!--</div>-->
+                                <!--<div *ngIf = "name.errors?.pattern && name.touched">-->
+                                    <!--The name doesn't seem right-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                    </div>
+                    <div class="col_6">
+                      <input type="text" placeholder="{{placeholder.last_name | translate}}" name="snames" [(ngModel)]="snames" required   />
+                      
+                              <!--<div *ngIf="sname.invalid && (sname.dirty || sname.touched)" class="validation_error">-->
+                                  <!--<div *ngIf = "sname.errors?.required">-->
+                                      <!--First SurName field can't be blank-->
+                                  <!--</div>-->
+                                  <!--<div *ngIf = "sname.errors?.pattern && sname.touched">-->
+                                      <!--The first Surname doesn't seem right-->
+                                  <!--</div>-->
+                              <!--</div>-->
+                      </div>
+                  </div>
+                </div>
+                <div class="form_group tel">
+                  <input type="tel" placeholder= {{placeholder.number}} name="mobile" [(ngModel)]="mobile" required  /><img src = "../assets/images/flag.svg" alt="" />
+                  <span style="
+                      position: absolute;
+                      left: 51px;
+                      font-weight: 500;
+                  ">+ 41</span>
+                  
+                </div>
+                <div class="form_group">
+                  <input type="email" placeholder="{{placeholder.email}}" name="email" [(ngModel)]= "email" required />
+                         
+                </div>
+                <!-- <div><span>{{title.partner_message | translate}}</span></div> -->
+                <div class="sub_btn"><button class="btn" [disabled]="f.invalid">{{button.valider}}</button></div>
+              </form>
+            </div>
+          </div>
+          <div class="col_6 l_section4_r">
+            <h2 [innerHTML] = "title.partner_title" ></h2>
+            <div class="contact_us" [innerHTML] = "description.contact_us_dis"></div>
+          </div>
+          <img src = "../assets/images/man.png" class="man" alt="man" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+    <section class="l_section4" *ngIf="show_future">
+      <div class="l_section4_in" style="padding-bottom: 0;">
+        <div class="container">
+          <div class="row clr">
+            <div class="col_6">
+              <h1 style="color: unset;">FUTURE PARTNER?</h1>
+              <p style="font-size: 15px;line-height: unset;padding-bottom: 30px;"><span>LE RESPONSIBLE PARTENAIRE</span> PRENDRA CONTACT AVEC VOUS TRES PROCHAINMENT. NOUS NOUS REJOUISSONS DE VOUS RENCONTERER!</p>
+              <h6 style="font-size: 15px;">En attendant, suis-nous sur nos reseaux!</h6>
+              
+            </div>
+            <div class="col_6 l_section4_r">
+              <img src = "../assets/images/shaking-hands.png" class="" alt="man" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+
+
